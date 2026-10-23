@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn Python step by step with CodeJuniorAfrica.">
+  <title>Python Adventure | CodeJuniorAfrica</title>
+
+  <link rel="stylesheet" href="../css/lessons.css">
+  <script src="../js/lessons.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Main navigation">
+      <a class="logo" href="../index.html">
+        <span class="logo-icon" aria-hidden="true">&lt;/&gt;</span>
+        CodeJunior<span>Africa</span>
+      </a>
+
+      <a class="home-link" href="../index.html">← Back to Home</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome">
+      <span class="eyebrow">🐍 PYTHON FOR BEGINNERS</span>
+      <h1>Welcome to Python Adventure!</h1>
+      <p>
+        Learn to code through simple explanations, fun examples,
+        and exciting challenges. Take your time and enjoy the journey!
+      </p>
+    </section>
+
+    <section class="learning-layout" aria-label="Python learning centre">
+
+      <aside class="sidebar">
+        <h2>Your Learning Journey</h2>
+        <p>Choose a lesson to get started.</p>
+
+        <div id="lesson-list" class="lesson-list"></div>
+
+        <div class="progress-panel">
+          <h3>Your Progress</h3>
+          <div class="progress-track"
+               role="progressbar"
+               aria-label="Course completion"
+               aria-valuemin="0"
+               aria-valuemax="100"
+               aria-valuenow="0"
+               id="progress-track">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <p id="progress-text">0 of 5 lessons completed</p>
+        </div>
+      </aside>
+
+      <section class="lesson-panel" aria-label="Current lesson">
+
+        <div class="lesson-top">
+          <span id="lesson-number" class="lesson-number">Lesson 1 of 5</span>
+          <span class="level-badge">Beginner Friendly</span>
+        </div>
+
+        <h2 id="lesson-title"></h2>
+        <p id="lesson-description" class="lesson-description"></p>
+
+        <div class="example-box">
+          <div class="example-heading">
+            <span>💻 Python Example</span>
+          </div>
+          <pre><code id="lesson-code"></code></pre>
+        </div>
+
+        <div class="explanation-box">
+          <h3>💡 Let's Understand</h3>
+          <p id="lesson-explanation"></p>
+        </div>
+
+        <div class="quiz-section">
+          <h3>🧠 Quick Challenge</h3>
+          <p id="quiz-question"></p>
+
+          <div id="quiz-options" class="quiz-options"></div>
+
+          <p id="quiz-feedback"
+             class="quiz-feedback"
+             role="status"
+             aria-live="polite"></p>
+        </div>
+
+        <div class="lesson-actions">
+          <button id="previous-btn" type="button" class="btn btn-outline">
+            ← Previous
+          </button>
+
+          <button id="next-btn" type="button" class="btn btn-primary">
+            Next Lesson →
+          </button>
+        </div>
+
+      </section>
+    </section>
+
+    <section class="encouragement">
+      <h2>🌟 Every great coder started as a beginner!</h2>
+      <p>Keep practising, stay curious, and never stop creating.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="current-year"></span> CodeJuniorAfrica</p>
+    <p>Learn • Create • Innovate</p>
+  </footer>
+
+</body>
+</html>
