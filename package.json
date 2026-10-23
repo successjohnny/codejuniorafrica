@@ -1,0 +1,13 @@
+
+{
+  "name": "codejuniorafrica",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CodeJuniorAfrica learning platform",
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
