@@ -9,7 +9,7 @@ on:
 
 jobs:
   browser-tests:
-    name: Test Learning Centre
+    name: Test Learning Centre and Python Playground
     runs-on: ubuntu-24.04
 
     steps:
@@ -29,11 +29,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Check JavaScript and worker types
+        run: npm run typecheck
+
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser tests
+      - name: Run deterministic browser tests
         run: npm run test:e2e
+
+      - name: Run real Pyodide integration test
+        run: npm run test:pyodide
 
       - name: Upload failure reports
         if: failure()

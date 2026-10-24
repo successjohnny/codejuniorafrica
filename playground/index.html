@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Write and run your first Python programs in the CodeJuniorAfrica Python Playground.">
+  <title>Python Playground | CodeJuniorAfrica</title>
+  <link rel="stylesheet" href="../css/playground.css">
+  <script src="../js/playground.js" defer></script>
+</head>
+<body>
+  <header class="playground-header">
+    <a class="brand" href="../index.html" aria-label="CodeJuniorAfrica home">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      CodeJunior<span>Africa</span>
+    </a>
+    <nav aria-label="Playground navigation">
+      <a href="../index.html">Home</a>
+      <a href="../lessons/index.html">Python Lessons</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">LEARN BY DOING</p>
+      <h1>Python Playground <span>🐍</span></h1>
+      <p>Write Python code, run it, and see what happens. Try an example or change the code to make it your own.</p>
+      <p class="runtime-note" id="runtime-status" role="status" aria-live="polite">Preparing Python in your browser… The first load needs an internet connection.</p>
+    </section>
+
+    <section class="workspace" aria-label="Python code editor and output">
+      <div class="editor-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-kicker">YOUR CODE</span>
+            <h2>Editor</h2>
+          </div>
+          <span class="language-pill">Python 3</span>
+        </div>
+
+        <label for="python-code">Write your Python program</label>
+        <textarea id="python-code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="editor-help">name = "Future Coder"
+age = 12
+
+print("Hello, Africa!")
+print("My name is", name)
+print("Next year I will be", age + 1)</textarea>
+        <p class="help-text" id="editor-help">Tip: Python uses spaces at the start of a line to group instructions inside things like <code>if</code> statements and loops.</p>
+
+        <div class="editor-actions">
+          <button class="run-button" id="run-code" type="button" disabled>▶ Run Code</button>
+          <button class="reset-button" id="reset-code" type="button">Reset Example</button>
+        </div>
+        <p class="run-hint">For safety, each run stops if it takes longer than a few seconds.</p>
+      </div>
+
+      <div class="output-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-kicker">WHAT HAPPENED?</span>
+            <h2>Output</h2>
+          </div>
+          <button class="clear-button" id="clear-output" type="button">Clear</button>
+        </div>
+        <pre id="python-output" class="output-content" tabindex="0" aria-label="Python output" aria-live="polite">Your program's output will appear here.</pre>
+        <p class="output-footnote">Only the text your program prints appears here. Error messages will appear here too.</p>
+      </div>
+    </section>
+
+    <section class="examples-section">
+      <div class="section-title">
+        <p class="eyebrow">PICK AN EXAMPLE</p>
+        <h2>What would you like to try?</h2>
+        <p>Select an example to put its code into the editor. Then press <strong>Run Code</strong>.</p>
+      </div>
+      <div class="example-grid">
+        <button class="example-card" type="button" data-example="hello">
+          <span class="example-icon" aria-hidden="true">👋</span>
+          <strong>Say hello</strong>
+          <span>Print a friendly message.</span>
+        </button>
+        <button class="example-card" type="button" data-example="types">
+          <span class="example-icon" aria-hidden="true">🧩</span>
+          <strong>Explore data types</strong>
+          <span>Try text, whole numbers, decimals, and true/false values.</span>
+        </button>
+        <button class="example-card" type="button" data-example="decisions">
+          <span class="example-icon" aria-hidden="true">🚦</span>
+          <strong>Make a decision</strong>
+          <span>Use <code>if</code> and <code>else</code>.</span>
+        </button>
+        <button class="example-card" type="button" data-example="loops">
+          <span class="example-icon" aria-hidden="true">🔁</span>
+          <strong>Repeat an action</strong>
+          <span>Use a loop to count to five.</span>
+        </button>
+        <button class="example-card" type="button" data-example="functions">
+          <span class="example-icon" aria-hidden="true">🛠️</span>
+          <strong>Create a function</strong>
+          <span>Give a reusable instruction a name.</span>
+        </button>
+      </div>
+    </section>
+
+    <aside class="learning-note">
+      <span aria-hidden="true">💡</span>
+      <div>
+        <h2>Experiment and learn</h2>
+        <p>Change one thing at a time, run the program again, and observe the difference. A mistake is a useful clue—not a reason to give up.</p>
+        <a href="../lessons/index.html">Go to the guided Python lessons →</a>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="page-footer">
+    <p>&copy; <span id="current-year"></span> CodeJuniorAfrica · Learn • Create • Innovate</p>
+  </footer>
+</body>
+</html>

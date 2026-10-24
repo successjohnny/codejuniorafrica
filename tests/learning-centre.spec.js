@@ -168,3 +168,68 @@ test("completes the data types lesson and updates progress", async ({ page }) =>
     "10"
   );
 });
+
+test.describe("Python Playground page", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      class MockWorker {
+        onmessage = null;
+        onerror = null;
+        constructor() {
+          window.setTimeout(() => {
+            this.onmessage?.({ data: { type: "ready" } });
+          }, 0);
+        }
+        postMessage(message) {
+          if (message.type === "initialize") return;
+          if (message.type === "run") {
+            const code = message.code;
+            let stdout = "Program finished without printing anything.";
+            let stderr = "";
+            let hasError = false;
+            if (code.includes("print(") && code.includes("Hello from Python!")) {
+              stdout = "Hello from Python!";
+            } else if (code.includes("raise ValueError")) {
+              stdout = "";
+              stderr = "ValueError: example error";
+              hasError = true;
+            }
+            window.setTimeout(() => {
+              this.onmessage?.({ data: { type: "result", stdout, stderr, hasError } });
+            }, 0);
+          }
+        }
+        terminate() {}
+      }
+      // @ts-ignore - replace Worker with a predictable test double.
+      window.Worker = MockWorker;
+    });
+    await page.goto("/playground/index.html");
+  });
+
+  test("loads the editor and starter examples", async ({ page }) => {
+    await expect(page.getByRole("heading", { name: "Python Playground" })).toBeVisible();
+    await expect(page.locator("#python-code")).toHaveValue(/Hello, Africa!/);
+    await expect(page.locator("button[data-example]")).toHaveCount(5);
+    await expect(page.locator("#run-code")).toBeEnabled();
+  });
+
+  test("loads a data types example into the editor", async ({ page }) => {
+    await page.locator('[data-example="types"]').click();
+    await expect(page.locator("#python-code")).toHaveValue(/is_learning = True/);
+    await expect(page.locator("#python-code")).toHaveValue(/type\(name\)/);
+  });
+
+  test("shows program output after Run Code is clicked", async ({ page }) => {
+    await page.locator("#python-code").fill('print("Hello from Python!")');
+    await page.locator("#run-code").click();
+    await expect(page.locator("#python-output")).toHaveText("Hello from Python!");
+  });
+
+  test("shows an error returned by the Python runtime", async ({ page }) => {
+    await page.locator("#python-code").fill("raise ValueError('example error')");
+    await page.locator("#run-code").click();
+    await expect(page.locator("#python-output")).toContainText("ValueError: example error");
+    await expect(page.locator("#python-output")).toHaveAttribute("data-state", "error");
+  });
+});
