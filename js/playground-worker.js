@@ -49,7 +49,7 @@ function reportError(error) {
   self.postMessage({ type: "runtime-error", message });
 }
 
-self.addEventListener("message", async (event) => {
+self.addEventListener("message", /** @param {MessageEvent<WorkerRequest>} event */ async (event) => {
   /** @type {WorkerRequest} */
   const message = event.data;
 
