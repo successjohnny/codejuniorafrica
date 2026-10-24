@@ -5,8 +5,9 @@
   "private": true,
   "description": "CodeJuniorAfrica learning platform",
   "scripts": {
-    "typecheck": "tsc --project tsconfig.json",
-    "test:e2e": "playwright test"
+    "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.worker.json",
+    "test:e2e": "playwright test tests/learning-centre.spec.js",
+    "test:pyodide": "playwright test tests/python-playground.integration.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1",
