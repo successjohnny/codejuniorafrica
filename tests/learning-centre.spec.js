@@ -10,13 +10,19 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
-test("displays the first Python lesson", async ({ page }) => {
+test("displays the first Python lesson and ten lessons in total", async ({ page }) => {
   await expect(page.locator("#lesson-title")).toHaveText(
     "What Is Coding?"
   );
 
+  await expect(page.locator("#lesson-number")).toHaveText(
+    "Lesson 1 of 10"
+  );
+
+  await expect(page.locator(".lesson-item")).toHaveCount(10);
+
   await expect(page.locator("#progress-text")).toHaveText(
-    "0 of 5 lessons completed"
+    "0 of 10 lessons completed"
   );
 });
 
@@ -50,13 +56,13 @@ test("saves completed progress after refreshing", async ({ page }) => {
   await page.locator("#quiz-options button").nth(0).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 5 lessons completed"
+    "1 of 10 lessons completed"
   );
 
   await page.reload();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 5 lessons completed"
+    "1 of 10 lessons completed"
   );
 
   await expect(
@@ -71,11 +77,94 @@ test("updates progress after completing two lessons", async ({ page }) => {
   await page.locator("#quiz-options button").nth(1).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "2 of 5 lessons completed"
+    "2 of 10 lessons completed"
   );
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "40"
+    "20"
+  );
+});
+
+test("displays the data types lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(5).click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Understanding Python Data Types"
+  );
+
+  await expect(page.locator("#lesson-code")).toContainText(
+    "is_learning = True"
+  );
+
+  await expect(page.locator("#lesson-explanation")).toContainText(
+    "bool"
+  );
+});
+
+test("displays the strings lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(6).click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Working with Strings"
+  );
+
+  await expect(page.locator("#lesson-code")).toContainText(
+    "name.upper()"
+  );
+});
+
+test("displays the if and else lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(7).click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Making Decisions with if and else"
+  );
+
+  await expect(page.locator("#lesson-code")).toContainText(
+    "if age >= 10:"
+  );
+});
+
+test("displays the loops lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(8).click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Repeating Actions with Loops"
+  );
+
+  await expect(page.locator("#lesson-code")).toContainText(
+    "range(1, 4)"
+  );
+});
+
+test("displays the functions lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(9).click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Creating Your Own Functions"
+  );
+
+  await expect(page.locator("#lesson-code")).toContainText(
+    "def greet(name: str) -> str:"
+  );
+});
+
+test("completes the data types lesson and updates progress", async ({ page }) => {
+  await page.locator(".lesson-item").nth(5).click();
+
+  await page.locator("#quiz-options button").nth(0).click();
+
+  await expect(page.locator("#quiz-feedback")).toContainText(
+    "🎉"
+  );
+
+  await expect(page.locator("#progress-text")).toHaveText(
+    "1 of 10 lessons completed"
+  );
+
+  await expect(page.locator("#progress-track")).toHaveAttribute(
+    "aria-valuenow",
+    "10"
   );
 });

@@ -104,8 +104,93 @@ const lessons = [
       "105"
     ],
     answer: 1,
-    success: "Amazing! You've completed your Python beginner adventure!",
+    success: "Amazing! You've completed your first five Python lessons!",
     hint: "The score starts at 10, then we add 5."
+  },
+  {
+    title: "Understanding Python Data Types",
+    description:
+      "A data type tells Python what kind of value we are working with. Text, whole numbers, decimal numbers and true-or-false values have different types.",
+    code: 'name = "Amina"\nage = 12\nheight = 1.5\nis_learning = True\n\nprint(type(name).__name__)\nprint(type(age).__name__)\nprint(type(height).__name__)\nprint(type(is_learning).__name__)',
+    explanation:
+      'The variable name has type str because it stores text. The variable age has type int because 12 is a whole number. The variable height has type float because 1.5 has a decimal point. The variable is_learning has type bool because True is a Boolean value. The type() function helps us inspect a value’s type, and __name__ displays the type name as text.',
+    question: "Which list correctly matches the four values to their types?",
+    options: [
+      "str, int, float, bool",
+      "int, str, bool, float",
+      "float, bool, str, int"
+    ],
+    answer: 0,
+    success: "Excellent! You can identify four important Python data types.",
+    hint: "Text is str, a whole number is int, a decimal is float, and True or False is bool."
+  },
+  {
+    title: "Working with Strings",
+    description:
+      "A string is text. We can store text in variables, join strings together, and use string methods to change how text is displayed.",
+    code: 'name = "Amina"\ngreeting = "Hello, " + name\nprint(greeting)\nprint(name.upper())',
+    explanation:
+      'The variable name has type str, and greeting also has type str. The + operator joins the two strings. The upper() method returns a new string with uppercase letters, so the final line displays AMINA. Strings are text values, not numbers for arithmetic.',
+    question: "What will name.upper() display when name is 'Amina'?",
+    options: [
+      "amina",
+      "Amina",
+      "AMINA"
+    ],
+    answer: 2,
+    success: "Great work! You can join strings and change their letter case.",
+    hint: "The upper() method changes lowercase letters to uppercase."
+  },
+  {
+    title: "Making Decisions with if and else",
+    description:
+      "Programs can make decisions. Python uses if and else to choose which instructions to run based on a condition.",
+    code: 'age = 12\n\nif age >= 10:\n    print("You can join the coding club!")\nelse:\n    print("Keep practising!")',
+    explanation:
+      'The variable age has type int. The expression age >= 10 compares the age with 10 and produces a bool value: True or False. If the condition is True, Python runs the indented instructions under if. Otherwise, it runs the instructions under else.',
+    question: "If age is 12, which message will Python display?",
+    options: [
+      "Keep practising!",
+      "You can join the coding club!",
+      "Both messages every time"
+    ],
+    answer: 1,
+    success: "Correct! You understand how Python makes decisions.",
+    hint: "12 is greater than or equal to 10, so the if condition is True."
+  },
+  {
+    title: "Repeating Actions with Loops",
+    description:
+      "A loop repeats instructions. A for loop is useful when we want Python to do something for each value in a sequence.",
+    code: 'for number in range(1, 4):\n    print(number)',
+    explanation:
+      "The range(1, 4) expression produces the integers 1, 2 and 3. It stops before 4. During each loop, number refers to the current int value. Python prints 1, then 2, then 3 on separate lines.",
+    question: "What numbers will this loop display?",
+    options: [
+      "1, 2, 3, 4",
+      "1, 2, 3",
+      "3 only"
+    ],
+    answer: 1,
+    success: "Fantastic! You understand how a for loop repeats instructions.",
+    hint: "range(1, 4) starts at 1 and stops before 4."
+  },
+  {
+    title: "Creating Your Own Functions",
+    description:
+      "A function is a reusable block of code. We can give it information to work with and let it return a result.",
+    code: 'def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nmessage: str = greet("Amina")\nprint(message)',
+    explanation:
+      'The function greet has a parameter named name with the type annotation str. The -> str annotation says the function is intended to return a string. The return statement sends the greeting back to the caller. The variable message is annotated as str. Python type annotations describe intended types, but Python does not automatically enforce them at runtime.',
+    question: "What will this program display?",
+    options: [
+      "Hello, Amina!",
+      "greet",
+      "name"
+    ],
+    answer: 0,
+    success: "Wonderful! You have completed all ten Python lessons!",
+    hint: "The function returns a greeting using the name Amina."
   }
 ];
 
