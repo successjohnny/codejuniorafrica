@@ -917,4 +917,21 @@ currentYearElement.textContent =
 // INITIALIZE LEARNING CENTRE
 // =====================================
 
+// A URL such as ?lesson=3 should open the third lesson.
+const requestedLesson = new URLSearchParams(
+  window.location.search
+).get("lesson");
+
+if (requestedLesson !== null) {
+  const requestedLessonNumber = Number(requestedLesson);
+
+  if (
+    Number.isInteger(requestedLessonNumber) &&
+    requestedLessonNumber >= 1 &&
+    requestedLessonNumber <= lessons.length
+  ) {
+    currentLesson = requestedLessonNumber - 1;
+  }
+}
+
 renderLesson();

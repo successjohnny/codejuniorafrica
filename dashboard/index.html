@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="Track your Python learning progress, celebrate achievements, and continue your coding adventure."
+    >
+    <title>My Learning Dashboard | CodeJuniorAfrica</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../js/dashboard.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+            <a class="brand" href="../index.html">
+                <span class="brand-icon" aria-hidden="true">💻</span>
+                CodeJuniorAfrica
+            </a>
+
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../lessons/index.html">Python Lessons</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <section class="welcome-card">
+            <div class="welcome-content">
+                <p class="eyebrow">YOUR LEARNING SPACE</p>
+                <h1>Welcome back, Young Coder! 👋</h1>
+                <p>
+                    Every great programmer starts somewhere.
+                    Keep learning, keep practising, and celebrate
+                    every step forward.
+                </p>
+                <a class="primary-button" id="resume-button"
+                   href="../lessons/index.html">
+                    Continue Learning →
+                </a>
+            </div>
+
+            <div class="welcome-illustration" aria-hidden="true">
+                <span>🐍</span>
+                <span>🚀</span>
+                <span>⭐</span>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="overview-title">
+            <div class="section-heading">
+                <p class="eyebrow">YOUR JOURNEY</p>
+                <h2 id="overview-title">Learning Overview</h2>
+            </div>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">📚</span>
+                    <p>Lessons Completed</p>
+                    <strong id="completed-count">0</strong>
+                    <span class="stat-detail">out of 10 lessons</span>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">📈</span>
+                    <p>Course Progress</p>
+                    <strong id="progress-percentage">0%</strong>
+                    <span class="stat-detail">Keep moving forward!</span>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">🏅</span>
+                    <p>Achievements Earned</p>
+                    <strong id="badges-count">0</strong>
+                    <span class="stat-detail">Three milestones to unlock</span>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">🎯</span>
+                    <p>Lessons Remaining</p>
+                    <strong id="remaining-count">10</strong>
+                    <span class="stat-detail">Your next adventure awaits</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="section progress-section"
+                 aria-labelledby="progress-title">
+            <div class="section-heading">
+                <p class="eyebrow">LOOK HOW FAR YOU'VE COME</p>
+                <h2 id="progress-title">Your Python Progress</h2>
+            </div>
+
+            <div class="progress-card">
+                <div class="progress-labels">
+                    <span>Python Adventure</span>
+                    <strong id="progress-label">0 of 10 lessons</strong>
+                </div>
+
+                <div
+                    class="progress-track"
+                    id="progress-track"
+                    role="progressbar"
+                    aria-label="Python course completion"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                >
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+
+                <p id="progress-message">
+                    Your coding adventure starts here. Complete your first lesson!
+                </p>
+            </div>
+        </section>
+
+        <section class="section next-section"
+                 aria-labelledby="next-title">
+            <div class="section-heading">
+                <p class="eyebrow">ONE STEP AT A TIME</p>
+                <h2 id="next-title">Your Next Adventure</h2>
+            </div>
+
+            <div class="next-card">
+                <div class="next-icon" aria-hidden="true">🚀</div>
+                <div class="next-content">
+                    <h3 id="next-lesson-title">Ready to begin?</h3>
+                    <p id="next-lesson-message">
+                        Start your Python learning adventure.
+                    </p>
+                </div>
+                <a class="primary-button" id="next-lesson-button"
+                   href="../lessons/index.html">
+                    Start Learning →
+                </a>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="achievements-title">
+            <div class="section-heading">
+                <p class="eyebrow">CELEBRATE YOUR WINS</p>
+                <h2 id="achievements-title">My Achievements</h2>
+                <p class="section-description">
+                    Every lesson you complete brings you closer to a new milestone.
+                </p>
+            </div>
+
+            <div class="achievement-grid" id="achievement-list">
+                <p class="empty-message">
+                    Your achievements will appear here.
+                </p>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="completed-title">
+            <div class="section-heading">
+                <p class="eyebrow">YOUR ACCOMPLISHMENTS</p>
+                <h2 id="completed-title">Completed Lessons</h2>
+            </div>
+
+            <div class="completed-card">
+                <ul id="completed-lessons" class="completed-list">
+                    <li class="empty-message">
+                        Your completed lessons will appear here.
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            <span id="current-year"></span> CodeJuniorAfrica.
+            Keep learning. Keep building. Keep shining! 🌟
+        </p>
+    </footer>
+</body>
+</html>
