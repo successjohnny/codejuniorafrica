@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="description"
+        content="View a learner's Python lesson progress and achievements on this browser."
+    >
+    <title>Parent Progress View | CodeJuniorAfrica</title>
+    <link rel="stylesheet" href="../css/parent-dashboard.css">
+    <script src="../js/parent-dashboard.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+            <a class="brand" href="../index.html">
+                <span aria-hidden="true">💻</span>
+                CodeJuniorAfrica
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Learner Dashboard</a>
+                <a href="../lessons/index.html">Python Lessons</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="parent-dashboard">
+        <section class="hero">
+            <p class="eyebrow">FAMILY LEARNING SPACE</p>
+            <h1>Learning Progress Report</h1>
+            <p>
+                Celebrate progress, recognise achievements, and encourage
+                the next step in your learner's coding journey.
+            </p>
+        </section>
+
+        <section class="panel learner-panel" aria-labelledby="learner-title">
+            <p class="eyebrow">LEARNER PROFILE</p>
+            <h2 id="learner-title">
+                Progress for <span id="parent-learner-name">Young Coder</span>
+            </h2>
+            <p id="parent-status" role="status" aria-live="polite">
+                Progress loaded from this browser.
+            </p>
+        </section>
+
+        <section class="stats-grid" aria-label="Learning summary">
+            <article class="stat-card">
+                <span aria-hidden="true">📚</span>
+                <h2>Lessons completed</h2>
+                <p class="stat-value" id="parent-completed-count">0 of 10</p>
+            </article>
+
+            <article class="stat-card">
+                <span aria-hidden="true">📈</span>
+                <h2>Course progress</h2>
+                <p class="stat-value" id="parent-progress-percentage">0%</p>
+            </article>
+
+            <article class="stat-card">
+                <span aria-hidden="true">🏅</span>
+                <h2>Achievements earned</h2>
+                <p class="stat-value" id="parent-badges-count">0 of 3</p>
+            </article>
+
+            <article class="stat-card">
+                <span aria-hidden="true">🎯</span>
+                <h2>Lessons remaining</h2>
+                <p class="stat-value" id="parent-remaining-count">10</p>
+            </article>
+        </section>
+
+        <section class="panel" aria-labelledby="progress-title">
+            <h2 id="progress-title">Python course progress</h2>
+            <div class="progress-labels">
+                <span>Course completion</span>
+                <strong id="parent-progress-label">0 of 10 lessons</strong>
+            </div>
+            <div
+                id="parent-progress-track"
+                class="progress-track"
+                role="progressbar"
+                aria-label="Learner Python course completion"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+            >
+                <div id="parent-progress-fill" class="progress-fill"></div>
+            </div>
+            <p id="parent-progress-message">
+                The learning journey is ready to begin.
+            </p>
+        </section>
+
+        <section class="panel" aria-labelledby="achievements-title">
+            <h2 id="achievements-title">Achievements</h2>
+            <p class="section-description">
+                Each milestone recognises effort and learning progress.
+            </p>
+            <div id="parent-achievements" class="achievement-grid">
+                <p>Achievements will appear here.</p>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="lessons-title">
+            <h2 id="lessons-title">Completed lessons</h2>
+            <ul id="parent-completed-lessons" class="lesson-list">
+                <li>No completed lessons yet.</li>
+            </ul>
+        </section>
+
+        <section class="panel next-panel" aria-labelledby="next-title">
+            <h2 id="next-title">Suggested next step</h2>
+            <p id="parent-next-lesson">
+                Start with the first Python lesson.
+            </p>
+            <a class="primary-button" href="../lessons/index.html">
+                Open Python Lessons →
+            </a>
+        </section>
+
+        <aside class="privacy-note" aria-labelledby="privacy-title">
+            <h2 id="privacy-title">About this progress report</h2>
+            <p>
+                This page reads progress saved in this browser. It does not
+                send reports to a parent, create a parent account, or
+                synchronise progress across devices. Anyone with access to
+                this browser may be able to view this information.
+            </p>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            <span id="parent-current-year"></span>
+            CodeJuniorAfrica. Keep learning and keep shining! 🌟
+        </p>
+    </footer>
+</body>
+</html>
