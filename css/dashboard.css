@@ -1,4 +1,3 @@
-
 :root {
     --primary: #5b4bdb;
     --primary-dark: #4032b0;
@@ -390,77 +389,6 @@ a:focus-visible {
     font-size: 0.9rem;
 }
 
-@media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .achievement-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    .navbar {
-        align-items: flex-start;
-        flex-direction: column;
-        justify-content: center;
-        padding: 16px 0;
-    }
-
-    .nav-links {
-        gap: 16px;
-        font-size: 0.9rem;
-    }
-
-    .dashboard {
-        margin-top: 22px;
-    }
-
-    .welcome-card {
-        align-items: flex-start;
-    }
-
-    .welcome-illustration {
-        display: none;
-    }
-
-    .stats-grid {
-        gap: 12px;
-    }
-
-    .stat-card {
-        padding: 16px;
-    }
-
-    .stat-card strong {
-        font-size: 1.7rem;
-    }
-
-    .next-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .next-card .primary-button {
-        width: 100%;
-    }
-
-    .progress-card {
-        padding: 20px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-
 /* LEARNER PROFILE */
 
 .profile-card {
@@ -538,7 +466,148 @@ a:focus-visible {
     color: var(--success);
 }
 
+/* PERSONALISED LEARNING PATH */
+
+.learning-path-message {
+    margin-bottom: 18px;
+    color: var(--muted);
+}
+
+.learning-path-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.learning-path-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    min-width: 0;
+    padding: 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.learning-path-item:hover {
+    transform: translateY(-3px);
+    border-color: #bcb3ff;
+}
+
+.learning-path-number {
+    display: grid;
+    place-items: center;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #eeeaff;
+    color: var(--primary-dark);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.learning-path-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.learning-path-content h3 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.learning-path-content p {
+    margin-bottom: 14px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.learning-path-link {
+    display: inline-block;
+    color: var(--primary-dark);
+    font-weight: 800;
+}
+
+.learning-path-link:hover {
+    text-decoration: underline;
+}
+
+.learning-path-link:focus-visible {
+    outline: 3px solid #ffb703;
+    outline-offset: 4px;
+    border-radius: 3px;
+}
+
+@media (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .learning-path-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 600px) {
+    .navbar {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        padding: 16px 0;
+    }
+
+    .nav-links {
+        gap: 16px;
+        font-size: 0.9rem;
+    }
+
+    .dashboard {
+        margin-top: 22px;
+    }
+
+    .welcome-card {
+        align-items: flex-start;
+    }
+
+    .welcome-illustration {
+        display: none;
+    }
+
+    .stats-grid {
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-card strong {
+        font-size: 1.7rem;
+    }
+
+    .next-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .next-card .primary-button {
+        width: 100%;
+    }
+
+    .progress-card {
+        padding: 20px;
+    }
+
     .profile-card {
         padding: 20px;
     }
@@ -549,5 +618,18 @@ a:focus-visible {
 
     .profile-button {
         width: 100%;
+    }
+
+    .learning-path-item {
+        padding: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
     }
 }

@@ -1,4 +1,3 @@
-
 "use strict";
 
 const STORAGE_KEY = "codejuniorafrica_python_progress_v1";
@@ -6,6 +5,7 @@ const PROFILE_STORAGE_KEY = "codejuniorafrica_learner_profile_v1";
 const DEFAULT_DISPLAY_NAME = "Young Coder";
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 30;
+const LEARNING_PATH_LIMIT = 3;
 
 const lessonTitles = [
     "What Is Coding?",
@@ -147,6 +147,11 @@ const nextLessonButton = getRequiredElement("next-lesson-button", "a");
 const resumeButton = getRequiredElement("resume-button", "a");
 const achievementList = getRequiredElement("achievement-list", "div");
 const completedLessonsList = getRequiredElement("completed-lessons", "ul");
+const learningPathList = getRequiredElement("learning-path-list", "div");
+const learningPathMessage = getRequiredElement(
+    "learning-path-message",
+    "p"
+);
 const currentYearElement = getRequiredElement("current-year", "span");
 
 /**
@@ -312,6 +317,68 @@ function renderNextLesson(completedLessons) {
 }
 
 /**
+ * Render the personalised path with up to three incomplete lessons.
+ * This function reads progress but never changes saved progress.
+ * @param {number[]} completedLessons
+ */
+function renderLearningPath(completedLessons) {
+    learningPathList.replaceChildren();
+
+    const completedSet = new Set(completedLessons);
+
+    const recommendedLessons = lessonTitles
+        .map((title, index) => ({
+            index,
+            title
+        }))
+        .filter((lesson) => !completedSet.has(lesson.index))
+        .slice(0, LEARNING_PATH_LIMIT);
+
+    if (recommendedLessons.length === 0) {
+        learningPathMessage.textContent =
+            "Congratulations! You have completed all ten Python lessons. Your Python learning journey is just beginning!";
+        return;
+    }
+
+    learningPathMessage.textContent =
+        "Here are your next recommended lessons. Complete them at your own pace.";
+
+    recommendedLessons.forEach((lesson) => {
+        const lessonNumber = lesson.index + 1;
+
+        const card = document.createElement("article");
+        card.className = "learning-path-item";
+
+        const number = document.createElement("span");
+        number.className = "learning-path-number";
+        number.setAttribute("aria-hidden", "true");
+        number.textContent = String(lessonNumber);
+
+        const content = document.createElement("div");
+        content.className = "learning-path-content";
+
+        const title = document.createElement("h3");
+        title.textContent = `Lesson ${lessonNumber}: ${lesson.title}`;
+
+        const description = document.createElement("p");
+        description.textContent = "Continue building your Python skills.";
+
+        const link = document.createElement("a");
+        link.className = "learning-path-link";
+        link.href = `../lessons/index.html?lesson=${lessonNumber}`;
+        link.textContent = "Start lesson →";
+        link.setAttribute(
+            "aria-label",
+            `Start Lesson ${lessonNumber}: ${lesson.title}`
+        );
+
+        content.append(title, description, link);
+        card.append(number, content);
+        learningPathList.append(card);
+    });
+}
+
+/**
  * Display completed lessons.
  * @param {number[]} completedLessons
  */
@@ -357,6 +424,7 @@ function renderDashboard() {
     renderStatistics(completedLessons);
     renderAchievements(completedCount);
     renderNextLesson(completedLessons);
+    renderLearningPath(completedLessons);
     renderCompletedLessons(completedLessons);
 }
 
