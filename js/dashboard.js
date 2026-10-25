@@ -2,6 +2,10 @@
 "use strict";
 
 const STORAGE_KEY = "codejuniorafrica_python_progress_v1";
+const PROFILE_STORAGE_KEY = "codejuniorafrica_learner_profile_v1";
+const DEFAULT_DISPLAY_NAME = "Young Coder";
+const MIN_NAME_LENGTH = 2;
+const MAX_NAME_LENGTH = 30;
 
 const lessonTitles = [
     "What Is Coding?",
@@ -41,7 +45,7 @@ const achievements = [
 ];
 
 /**
- * Find an element and verify that it has the expected HTML element type.
+ * Find an element and verify its HTML element type.
  * @param {string} id
  * @param {string} elementType
  * @returns {HTMLElement}
@@ -57,8 +61,35 @@ function getRequiredElement(id, elementType) {
 }
 
 /**
- * Check whether a stored lesson index is valid.
- * Lesson indexes are zero-based: 0 to 9.
+ * Read a saved display name.
+ * @returns {string}
+ */
+function loadDisplayName() {
+    try {
+        const savedName = localStorage.getItem(PROFILE_STORAGE_KEY);
+
+        if (savedName === null) {
+            return DEFAULT_DISPLAY_NAME;
+        }
+
+        const trimmedName = savedName.trim();
+
+        if (
+            trimmedName.length < MIN_NAME_LENGTH ||
+            trimmedName.length > MAX_NAME_LENGTH
+        ) {
+            return DEFAULT_DISPLAY_NAME;
+        }
+
+        return trimmedName;
+    } catch (error) {
+        console.error("Unable to read the learner profile:", error);
+        return DEFAULT_DISPLAY_NAME;
+    }
+}
+
+/**
+ * Check whether a lesson index is valid.
  * @param {unknown} index
  * @returns {index is number}
  */
@@ -72,7 +103,7 @@ function isValidLessonIndex(index) {
 }
 
 /**
- * Read the existing Python lesson progress.
+ * Read saved lesson progress.
  * Invalid or duplicated lesson indexes are ignored.
  * @returns {number[]}
  */
@@ -97,6 +128,11 @@ function loadProgress() {
     }
 }
 
+const welcomeHeading = getRequiredElement("welcome-heading", "h1");
+const profileForm = getRequiredElement("profile-form", "form");
+const displayNameInput = getRequiredElement("display-name", "input");
+const profileFeedback = getRequiredElement("profile-feedback", "p");
+
 const completedCountElement = getRequiredElement("completed-count", "strong");
 const percentageElement = getRequiredElement("progress-percentage", "strong");
 const badgesCountElement = getRequiredElement("badges-count", "strong");
@@ -114,7 +150,68 @@ const completedLessonsList = getRequiredElement("completed-lessons", "ul");
 const currentYearElement = getRequiredElement("current-year", "span");
 
 /**
- * Update the four overview statistics and progress bar.
+ * Update the welcome heading using the learner's display name.
+ * @param {string} name
+ */
+function renderWelcome(name) {
+    welcomeHeading.textContent = `Welcome back, ${name}! 👋`;
+}
+
+/**
+ * Show a message below the profile form.
+ * @param {string} message
+ * @param {"success" | "error" | "info"} type
+ */
+function showProfileFeedback(message, type) {
+    profileFeedback.textContent = message;
+    profileFeedback.className = "profile-feedback";
+
+    if (type === "success") {
+        profileFeedback.classList.add("success");
+    } else if (type === "error") {
+        profileFeedback.classList.add("error");
+    }
+}
+
+/**
+ * Save a learner's display name.
+ */
+function saveDisplayName() {
+    const name = displayNameInput.value.trim();
+
+    if (
+        name.length < MIN_NAME_LENGTH ||
+        name.length > MAX_NAME_LENGTH
+    ) {
+        showProfileFeedback(
+            `Please enter a name between ${MIN_NAME_LENGTH} and ${MAX_NAME_LENGTH} characters.`,
+            "error"
+        );
+        displayNameInput.focus();
+        return;
+    }
+
+    try {
+        localStorage.setItem(PROFILE_STORAGE_KEY, name);
+        renderWelcome(name);
+        displayNameInput.value = name;
+
+        showProfileFeedback(
+            `Your display name has been saved. Welcome, ${name}!`,
+            "success"
+        );
+    } catch (error) {
+        console.error("Unable to save the learner profile:", error);
+
+        showProfileFeedback(
+            "Your name could not be saved in this browser. Please check your browser storage settings and try again.",
+            "error"
+        );
+    }
+}
+
+/**
+ * Update overview statistics and the progress bar.
  * @param {number[]} completedLessons
  */
 function renderStatistics(completedLessons) {
@@ -184,7 +281,6 @@ function renderAchievements(completedCount) {
 
 /**
  * Find the next incomplete lesson and update navigation.
- * The lesson page must read the lesson query parameter.
  * @param {number[]} completedLessons
  */
 function renderNextLesson(completedLessons) {
@@ -216,7 +312,7 @@ function renderNextLesson(completedLessons) {
 }
 
 /**
- * Display the titles of completed lessons.
+ * Display completed lessons.
  * @param {number[]} completedLessons
  */
 function renderCompletedLessons(completedLessons) {
@@ -252,7 +348,7 @@ function renderCompletedLessons(completedLessons) {
 }
 
 /**
- * Render the dashboard from the existing saved lesson progress.
+ * Render the dashboard from saved lesson progress.
  */
 function renderDashboard() {
     const completedLessons = loadProgress();
@@ -266,13 +362,30 @@ function renderDashboard() {
 
 currentYearElement.textContent = String(new Date().getFullYear());
 
+const savedDisplayName = loadDisplayName();
+renderWelcome(savedDisplayName);
+displayNameInput.value =
+    savedDisplayName === DEFAULT_DISPLAY_NAME ? "" : savedDisplayName;
+
+profileForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    saveDisplayName();
+});
+
 renderDashboard();
 
 /*
- * If lesson progress changes in another browser tab, refresh the dashboard.
+ * Refresh lesson progress if it changes in another browser tab.
  */
 window.addEventListener("storage", (event) => {
     if (event.key === STORAGE_KEY || event.key === null) {
         renderDashboard();
+    }
+
+    if (event.key === PROFILE_STORAGE_KEY || event.key === null) {
+        const name = loadDisplayName();
+        renderWelcome(name);
+        displayNameInput.value =
+            name === DEFAULT_DISPLAY_NAME ? "" : name;
     }
 });
