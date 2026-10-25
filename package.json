@@ -1,3 +1,4 @@
+
 {
   "name": "codejuniorafrica",
   "version": "1.0.0",
@@ -5,7 +6,7 @@
   "description": "CodeJuniorAfrica learning platform",
   "scripts": {
     "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.worker.json",
-    "test:e2e": "playwright test tests/learning-centre.spec.js tests/dashboard.spec.js",
+    "test:e2e": "playwright test tests/learning-centre.spec.js tests/dashboard.spec.js tests/parent-dashboard.spec.js",
     "test:pyodide": "playwright test tests/python-playground.integration.spec.js"
   },
   "devDependencies": {
