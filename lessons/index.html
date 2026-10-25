@@ -55,6 +55,20 @@
           </div>
           <p id="progress-text">0 of 10 lessons completed</p>
         </div>
+
+        <section class="next-lesson-panel" aria-labelledby="next-lesson-heading">
+          <h3 id="next-lesson-heading">Your Next Step</h3>
+          <p id="next-lesson-text">Complete a lesson to begin your journey.</p>
+          <button id="continue-learning-btn" type="button" class="btn btn-primary">
+            Continue Learning →
+          </button>
+        </section>
+
+        <section class="achievements-panel" aria-labelledby="achievements-heading">
+          <h3 id="achievements-heading">🏆 Your Achievements</h3>
+          <p class="achievements-intro">Earn badges as you learn and practise.</p>
+          <div id="achievement-list" class="achievement-list" aria-live="polite"></div>
+        </section>
       </aside>
 
       <section class="lesson-panel" aria-label="Current lesson">
@@ -64,7 +78,7 @@
           <span class="level-badge">Beginner Friendly</span>
         </div>
 
-        <h2 id="lesson-title"></h2>
+        <h2 id="lesson-title" tabindex="-1"></h2>
         <p id="lesson-description" class="lesson-description"></p>
 
         <div class="example-box">

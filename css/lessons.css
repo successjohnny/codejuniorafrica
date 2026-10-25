@@ -214,6 +214,81 @@ a {
   font-weight: 700;
 }
 
+/* NEXT LESSON AND ACHIEVEMENTS */
+
+.next-lesson-panel,
+.achievements-panel {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--white);
+}
+
+.next-lesson-panel h3,
+.achievements-panel h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.next-lesson-panel > p,
+.achievements-intro {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+
+.next-lesson-panel .btn {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.achievement-list {
+  display: grid;
+  gap: 10px;
+}
+
+.achievement-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.achievement-card.unlocked {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.achievement-card.locked {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.achievement-icon {
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+.achievement-details {
+  min-width: 0;
+}
+
+.achievement-details h4 {
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+
+.achievement-details p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 /* LESSON CONTENT */
 
 .lesson-top {

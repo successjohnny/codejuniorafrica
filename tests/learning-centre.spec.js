@@ -86,6 +86,62 @@ test("updates progress after completing two lessons", async ({ page }) => {
   );
 });
 
+test("shows locked achievement badges and the next lesson at the start", async ({ page }) => {
+  await expect(page.locator(".achievement-card")).toHaveCount(3);
+  await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/locked/);
+  await expect(page.locator("#next-lesson-text")).toContainText(
+    "Lesson 1 — What Is Coding?"
+  );
+});
+
+test("unlocks the first badge after completing one lesson and keeps it after refresh", async ({ page }) => {
+  await page.locator("#quiz-options button").nth(0).click();
+
+  await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
+  await expect(page.locator('[data-achievement-id="halfway-hero"]')).toHaveClass(/locked/);
+  await expect(page.locator("#next-lesson-text")).toContainText(
+    "Lesson 2 — Your First Python Program"
+  );
+
+  await page.reload();
+
+  await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
+  await expect(page.locator("#progress-text")).toHaveText(
+    "1 of 10 lessons completed"
+  );
+});
+
+test("continue learning opens the next incomplete lesson", async ({ page }) => {
+  await page.locator(".lesson-item").nth(0).click();
+  await page.locator("#quiz-options button").nth(0).click();
+  await page.locator(".lesson-item").nth(2).click();
+  await page.locator("#quiz-options button").nth(1).click();
+
+  await page.locator("#continue-learning-btn").click();
+
+  await expect(page.locator("#lesson-title")).toHaveText(
+    "Your First Python Program"
+  );
+});
+
+test("shows the course-complete state when all lessons are completed", async ({ page }) => {
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "codejuniorafrica_python_progress_v1",
+      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    );
+  });
+  await page.reload();
+
+  await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
+  await expect(page.locator('[data-achievement-id="halfway-hero"]')).toHaveClass(/unlocked/);
+  await expect(page.locator('[data-achievement-id="python-champion"]')).toHaveClass(/unlocked/);
+  await expect(page.locator("#continue-learning-btn")).toBeDisabled();
+  await expect(page.locator("#next-lesson-text")).toContainText(
+    "completed every Python lesson"
+  );
+});
+
 test("displays the data types lesson", async ({ page }) => {
   await page.locator(".lesson-item").nth(5).click();
 
