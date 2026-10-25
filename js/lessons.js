@@ -308,6 +308,58 @@ const currentYearElement = getLessonElement(
   HTMLElement
 );
 
+/** @type {HTMLElement} */
+const nextLessonText = getLessonElement(
+  "next-lesson-text",
+  HTMLElement
+);
+
+/** @type {HTMLButtonElement} */
+const continueLearningButton = getLessonElement(
+  "continue-learning-btn",
+  HTMLButtonElement
+);
+
+/** @type {HTMLElement} */
+const achievementList = getLessonElement(
+  "achievement-list",
+  HTMLElement
+);
+
+/**
+ * @typedef {Object} Achievement
+ * @property {string} id
+ * @property {string} icon
+ * @property {string} title
+ * @property {string} description
+ * @property {number} requiredLessons
+ */
+
+/** @type {Achievement[]} */
+const achievements = [
+  {
+    id: "first-step",
+    icon: "🌱",
+    title: "First Step",
+    description: "Complete your first lesson.",
+    requiredLessons: 1
+  },
+  {
+    id: "halfway-hero",
+    icon: "⭐",
+    title: "Halfway Hero",
+    description: "Complete five Python lessons.",
+    requiredLessons: 5
+  },
+  {
+    id: "python-champion",
+    icon: "🏆",
+    title: "Python Champion",
+    description: "Complete all ten Python lessons.",
+    requiredLessons: 10
+  }
+];
+
 // =====================================
 // LESSON DATA VALIDATION
 // =====================================
@@ -502,7 +554,99 @@ function updateProgress() {
     progressText.textContent =
       "🎉 Congratulations! All lessons completed!";
   }
+
+  renderAchievements();
+  updateNextLesson();
 }
+
+// =====================================
+// ACHIEVEMENTS AND NEXT LESSON
+// =====================================
+
+/**
+ * Render badges based on the saved lesson-completion count.
+ * Badges are derived from completed lessons and are not stored separately.
+ *
+ * @returns {void}
+ */
+function renderAchievements() {
+  achievementList.replaceChildren();
+
+  achievements.forEach((achievement) => {
+    /** @type {boolean} */
+    const unlocked =
+      completedLessons.length >= achievement.requiredLessons;
+
+    /** @type {HTMLElement} */
+    const card = document.createElement("article");
+    card.className = unlocked
+      ? "achievement-card unlocked"
+      : "achievement-card locked";
+    card.dataset.achievementId = achievement.id;
+
+    /** @type {HTMLElement} */
+    const icon = document.createElement("span");
+    icon.className = "achievement-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = unlocked ? achievement.icon : "🔒";
+
+    /** @type {HTMLElement} */
+    const details = document.createElement("div");
+    details.className = "achievement-details";
+
+    /** @type {HTMLElement} */
+    const title = document.createElement("h4");
+    title.textContent = achievement.title;
+
+    /** @type {HTMLElement} */
+    const description = document.createElement("p");
+    description.textContent = unlocked
+      ? achievement.description
+      : `${achievement.description} (${achievement.requiredLessons} lessons needed)`;
+
+    details.append(title, description);
+    card.append(icon, details);
+    achievementList.appendChild(card);
+  });
+}
+
+/**
+ * Show the first lesson that has not yet been completed.
+ *
+ * @returns {void}
+ */
+function updateNextLesson() {
+  /** @type {number} */
+  const nextLessonIndex = lessons.findIndex(
+    (_lesson, index) => !completedLessons.includes(index)
+  );
+
+  if (nextLessonIndex === -1) {
+    nextLessonText.textContent =
+      "Amazing work! You have completed every Python lesson.";
+    continueLearningButton.textContent = "Course Completed! 🎉";
+    continueLearningButton.disabled = true;
+    return;
+  }
+
+  nextLessonText.textContent =
+    `Up next: Lesson ${nextLessonIndex + 1} — ${lessons[nextLessonIndex].title}`;
+  continueLearningButton.textContent = "Continue Learning →";
+  continueLearningButton.disabled = false;
+}
+
+continueLearningButton.addEventListener("click", () => {
+  /** @type {number} */
+  const nextLessonIndex = lessons.findIndex(
+    (_lesson, index) => !completedLessons.includes(index)
+  );
+
+  if (isValidLessonIndex(nextLessonIndex)) {
+    currentLesson = nextLessonIndex;
+    renderLesson();
+    lessonTitle.focus?.();
+  }
+});
 
 // =====================================
 // DISPLAY LESSON MENU
