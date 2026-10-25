@@ -459,3 +459,95 @@ a:focus-visible {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* LEARNER PROFILE */
+
+.profile-card {
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.profile-card .section-heading {
+    margin-bottom: 18px;
+}
+
+.profile-form {
+    max-width: 680px;
+}
+
+.profile-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.profile-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.profile-input {
+    flex: 1;
+    min-width: 0;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #cbd0e4;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+}
+
+.profile-input:focus-visible,
+.profile-button:focus-visible {
+    outline: 3px solid #ffb703;
+    outline-offset: 3px;
+}
+
+.profile-button {
+    min-height: 46px;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.profile-button:hover {
+    background: var(--primary-dark);
+}
+
+.profile-feedback {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.profile-feedback.error {
+    color: #b42318;
+}
+
+.profile-feedback.success {
+    color: var(--success);
+}
+
+@media (max-width: 600px) {
+    .profile-card {
+        padding: 20px;
+    }
+
+    .profile-controls {
+        flex-direction: column;
+    }
+
+    .profile-button {
+        width: 100%;
+    }
+}

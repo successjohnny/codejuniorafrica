@@ -19,7 +19,6 @@
                 <span class="brand-icon" aria-hidden="true">💻</span>
                 CodeJuniorAfrica
             </a>
-
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../lessons/index.html">Python Lessons</a>
@@ -31,7 +30,7 @@
         <section class="welcome-card">
             <div class="welcome-content">
                 <p class="eyebrow">YOUR LEARNING SPACE</p>
-                <h1>Welcome back, Young Coder! 👋</h1>
+                <h1 id="welcome-heading">Welcome back, Young Coder! 👋</h1>
                 <p>
                     Every great programmer starts somewhere.
                     Keep learning, keep practising, and celebrate
@@ -50,6 +49,47 @@
             </div>
         </section>
 
+        <section class="section profile-card" aria-labelledby="profile-title">
+            <div class="section-heading">
+                <p class="eyebrow">MAKE IT YOURS</p>
+                <h2 id="profile-title">Your Learner Profile</h2>
+                <p class="section-description">
+                    Choose the name you want us to use when welcoming you.
+                </p>
+            </div>
+
+            <form id="profile-form" class="profile-form">
+                <label for="display-name" class="profile-label">
+                    Your display name
+                </label>
+                <div class="profile-controls">
+                    <input
+                        id="display-name"
+                        name="displayName"
+                        class="profile-input"
+                        type="text"
+                        minlength="2"
+                        maxlength="30"
+                        autocomplete="nickname"
+                        placeholder="For example, StarCoder"
+                        aria-describedby="profile-feedback"
+                        required
+                    >
+                    <button class="profile-button" type="submit">
+                        Save Name
+                    </button>
+                </div>
+                <p
+                    id="profile-feedback"
+                    class="profile-feedback"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Your display name is saved in this browser.
+                </p>
+            </form>
+        </section>
+
         <section class="section" aria-labelledby="overview-title">
             <div class="section-heading">
                 <p class="eyebrow">YOUR JOURNEY</p>
@@ -63,21 +103,18 @@
                     <strong id="completed-count">0</strong>
                     <span class="stat-detail">out of 10 lessons</span>
                 </article>
-
                 <article class="stat-card">
                     <span class="stat-icon" aria-hidden="true">📈</span>
                     <p>Course Progress</p>
                     <strong id="progress-percentage">0%</strong>
                     <span class="stat-detail">Keep moving forward!</span>
                 </article>
-
                 <article class="stat-card">
                     <span class="stat-icon" aria-hidden="true">🏅</span>
                     <p>Achievements Earned</p>
                     <strong id="badges-count">0</strong>
                     <span class="stat-detail">Three milestones to unlock</span>
                 </article>
-
                 <article class="stat-card">
                     <span class="stat-icon" aria-hidden="true">🎯</span>
                     <p>Lessons Remaining</p>
@@ -93,13 +130,11 @@
                 <p class="eyebrow">LOOK HOW FAR YOU'VE COME</p>
                 <h2 id="progress-title">Your Python Progress</h2>
             </div>
-
             <div class="progress-card">
                 <div class="progress-labels">
                     <span>Python Adventure</span>
                     <strong id="progress-label">0 of 10 lessons</strong>
                 </div>
-
                 <div
                     class="progress-track"
                     id="progress-track"
@@ -111,20 +146,17 @@
                 >
                     <div class="progress-fill" id="progress-fill"></div>
                 </div>
-
                 <p id="progress-message">
                     Your coding adventure starts here. Complete your first lesson!
                 </p>
             </div>
         </section>
 
-        <section class="section next-section"
-                 aria-labelledby="next-title">
+        <section class="section next-section" aria-labelledby="next-title">
             <div class="section-heading">
                 <p class="eyebrow">ONE STEP AT A TIME</p>
                 <h2 id="next-title">Your Next Adventure</h2>
             </div>
-
             <div class="next-card">
                 <div class="next-icon" aria-hidden="true">🚀</div>
                 <div class="next-content">
@@ -148,11 +180,8 @@
                     Every lesson you complete brings you closer to a new milestone.
                 </p>
             </div>
-
             <div class="achievement-grid" id="achievement-list">
-                <p class="empty-message">
-                    Your achievements will appear here.
-                </p>
+                <p class="empty-message">Your achievements will appear here.</p>
             </div>
         </section>
 
@@ -161,7 +190,6 @@
                 <p class="eyebrow">YOUR ACCOMPLISHMENTS</p>
                 <h2 id="completed-title">Completed Lessons</h2>
             </div>
-
             <div class="completed-card">
                 <ul id="completed-lessons" class="completed-list">
                     <li class="empty-message">
