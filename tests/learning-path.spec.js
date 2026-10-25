@@ -71,19 +71,35 @@ test("does not recommend lessons already completed", async ({ page }) => {
 
   await page.reload();
 
-  const recommendations = page.locator("#learning-path-list .learning-path-item");
-
-  await expect(recommendations).not.toContainText(
-    "Lesson 1: What Is Coding?"
+  const recommendations = page.locator(
+    "#learning-path-list .learning-path-item"
   );
 
-  await expect(recommendations).not.toContainText(
-    "Lesson 2: Your First Python Program"
+  await expect(recommendations).toHaveCount(3);
+
+  await expect(recommendations.nth(0)).toContainText(
+    "Lesson 3: Understanding Variables"
   );
 
-  await expect(recommendations).not.toContainText(
-    "Lesson 4: Numbers and Calculations"
+  await expect(recommendations.nth(1)).toContainText(
+    "Lesson 5: Your First Coding Challenge"
   );
+
+  await expect(recommendations.nth(2)).toContainText(
+    "Lesson 6: Understanding Python Data Types"
+  );
+
+  await expect(
+    page.locator("#learning-path-list")
+  ).not.toContainText("Lesson 1: What Is Coding?");
+
+  await expect(
+    page.locator("#learning-path-list")
+  ).not.toContainText("Lesson 2:");
+
+  await expect(
+    page.locator("#learning-path-list")
+  ).not.toContainText("Lesson 4:");
 });
 
 test("shows a completion message when all lessons are complete", async ({ page }) => {
