@@ -69,9 +69,11 @@ test("unlocks achievements at the correct milestones", async ({ page }) => {
   await page.reload();
 
   await expect(page.locator(".achievement-card.earned")).toHaveCount(2);
-  await expect(page.locator(".achievement-card.earned")).toContainText(
-    "Halfway Hero"
-  );
+  await expect(
+    page.locator(".achievement-card.earned").filter({
+      hasText: "Halfway Hero"
+    })
+  ).toHaveCount(1);
 
   await page.evaluate((key) => {
     localStorage.setItem(
