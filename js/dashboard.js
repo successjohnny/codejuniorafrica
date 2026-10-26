@@ -1,3 +1,4 @@
+
 "use strict";
 
 const STORAGE_KEY = "codejuniorafrica_python_progress_v1";
@@ -46,14 +47,24 @@ const achievements = [
 
 /**
  * Find an element and verify its HTML element type.
+ *
+ * The generic type T preserves the specific element type for TypeScript.
+ * Both the tag name and runtime constructor are checked.
+ *
+ * @template {HTMLElement} T
  * @param {string} id
  * @param {string} elementType
- * @returns {HTMLElement}
+ * @param {new () => T} expectedConstructor
+ * @returns {T}
  */
-function getRequiredElement(id, elementType) {
+function getRequiredElement(id, elementType, expectedConstructor) {
     const element = document.getElementById(id);
 
-    if (!element || element.tagName.toLowerCase() !== elementType) {
+    if (
+        !element ||
+        element.tagName.toLowerCase() !== elementType ||
+        !(element instanceof expectedConstructor)
+    ) {
         throw new Error(`Missing or invalid HTML element: #${id}`);
     }
 
@@ -104,7 +115,7 @@ function isValidLessonIndex(index) {
 
 /**
  * Read saved lesson progress.
- * Invalid or duplicated lesson indexes are ignored.
+ * Invalid, duplicated, and out-of-range indexes are ignored.
  * @returns {number[]}
  */
 function loadProgress() {
@@ -115,57 +126,165 @@ function loadProgress() {
             return [];
         }
 
+        /** @type {unknown} */
         const parsedProgress = JSON.parse(savedProgress);
 
         if (!Array.isArray(parsedProgress)) {
             return [];
         }
 
-        return [...new Set(parsedProgress.filter(isValidLessonIndex))];
+        const validIndexes = parsedProgress.filter(isValidLessonIndex);
+
+        return [...new Set(validIndexes)].sort((a, b) => a - b);
     } catch (error) {
-        console.error("Unable to read saved learning progress:", error);
+        console.error(
+            "Unable to read saved learning progress:",
+            error
+        );
         return [];
     }
 }
 
-const welcomeHeading = getRequiredElement("welcome-heading", "h1");
-const profileForm = getRequiredElement("profile-form", "form");
-const displayNameInput = getRequiredElement("display-name", "input");
-const profileFeedback = getRequiredElement("profile-feedback", "p");
+const welcomeHeading = getRequiredElement(
+    "welcome-heading",
+    "h1",
+    HTMLHeadingElement
+);
 
-const completedCountElement = getRequiredElement("completed-count", "strong");
-const percentageElement = getRequiredElement("progress-percentage", "strong");
-const badgesCountElement = getRequiredElement("badges-count", "strong");
-const remainingCountElement = getRequiredElement("remaining-count", "strong");
-const progressTrack = getRequiredElement("progress-track", "div");
-const progressFill = getRequiredElement("progress-fill", "div");
-const progressLabel = getRequiredElement("progress-label", "strong");
-const progressMessage = getRequiredElement("progress-message", "p");
-const nextLessonTitle = getRequiredElement("next-lesson-title", "h3");
-const nextLessonMessage = getRequiredElement("next-lesson-message", "p");
-const nextLessonButton = getRequiredElement("next-lesson-button", "a");
-const resumeButton = getRequiredElement("resume-button", "a");
-const achievementList = getRequiredElement("achievement-list", "div");
-const completedLessonsList = getRequiredElement("completed-lessons", "ul");
-const learningPathList = getRequiredElement("learning-path-list", "div");
+const profileForm = getRequiredElement(
+    "profile-form",
+    "form",
+    HTMLFormElement
+);
+
+const displayNameInput = getRequiredElement(
+    "display-name",
+    "input",
+    HTMLInputElement
+);
+
+const profileFeedback = getRequiredElement(
+    "profile-feedback",
+    "p",
+    HTMLParagraphElement
+);
+
+const completedCountElement = getRequiredElement(
+    "completed-count",
+    "strong",
+    HTMLElement
+);
+
+const percentageElement = getRequiredElement(
+    "progress-percentage",
+    "strong",
+    HTMLElement
+);
+
+const badgesCountElement = getRequiredElement(
+    "badges-count",
+    "strong",
+    HTMLElement
+);
+
+const remainingCountElement = getRequiredElement(
+    "remaining-count",
+    "strong",
+    HTMLElement
+);
+
+const progressTrack = getRequiredElement(
+    "progress-track",
+    "div",
+    HTMLDivElement
+);
+
+const progressFill = getRequiredElement(
+    "progress-fill",
+    "div",
+    HTMLDivElement
+);
+
+const progressLabel = getRequiredElement(
+    "progress-label",
+    "strong",
+    HTMLElement
+);
+
+const progressMessage = getRequiredElement(
+    "progress-message",
+    "p",
+    HTMLParagraphElement
+);
+
+const nextLessonTitle = getRequiredElement(
+    "next-lesson-title",
+    "h3",
+    HTMLHeadingElement
+);
+
+const nextLessonMessage = getRequiredElement(
+    "next-lesson-message",
+    "p",
+    HTMLParagraphElement
+);
+
+const nextLessonButton = getRequiredElement(
+    "next-lesson-button",
+    "a",
+    HTMLAnchorElement
+);
+
+const resumeButton = getRequiredElement(
+    "resume-button",
+    "a",
+    HTMLAnchorElement
+);
+
+const achievementList = getRequiredElement(
+    "achievement-list",
+    "div",
+    HTMLDivElement
+);
+
+const completedLessonsList = getRequiredElement(
+    "completed-lessons",
+    "ul",
+    HTMLUListElement
+);
+
+const learningPathList = getRequiredElement(
+    "learning-path-list",
+    "div",
+    HTMLDivElement
+);
+
 const learningPathMessage = getRequiredElement(
     "learning-path-message",
-    "p"
+    "p",
+    HTMLParagraphElement
 );
-const currentYearElement = getRequiredElement("current-year", "span");
+
+const currentYearElement = getRequiredElement(
+    "current-year",
+    "span",
+    HTMLSpanElement
+);
 
 /**
  * Update the welcome heading using the learner's display name.
  * @param {string} name
+ * @returns {void}
  */
 function renderWelcome(name) {
     welcomeHeading.textContent = `Welcome back, ${name}! 👋`;
 }
 
 /**
- * Show a message below the profile form.
+ * Show feedback below the profile form.
  * @param {string} message
  * @param {"success" | "error" | "info"} type
+ * @returns {void}
  */
 function showProfileFeedback(message, type) {
     profileFeedback.textContent = message;
@@ -179,7 +298,8 @@ function showProfileFeedback(message, type) {
 }
 
 /**
- * Save a learner's display name.
+ * Save the learner's display name.
+ * @returns {void}
  */
 function saveDisplayName() {
     const name = displayNameInput.value.trim();
@@ -192,6 +312,7 @@ function saveDisplayName() {
             `Please enter a name between ${MIN_NAME_LENGTH} and ${MAX_NAME_LENGTH} characters.`,
             "error"
         );
+
         displayNameInput.focus();
         return;
     }
@@ -218,12 +339,15 @@ function saveDisplayName() {
 /**
  * Update overview statistics and the progress bar.
  * @param {number[]} completedLessons
+ * @returns {void}
  */
 function renderStatistics(completedLessons) {
     const completedCount = completedLessons.length;
     const totalLessons = lessonTitles.length;
     const remainingCount = totalLessons - completedCount;
-    const percentage = Math.round((completedCount / totalLessons) * 100);
+    const percentage = Math.round(
+        (completedCount / totalLessons) * 100
+    );
 
     completedCountElement.textContent = String(completedCount);
     percentageElement.textContent = `${percentage}%`;
@@ -235,7 +359,9 @@ function renderStatistics(completedLessons) {
 
     badgesCountElement.textContent = String(earnedAchievements.length);
 
-    progressLabel.textContent = `${completedCount} of ${totalLessons} lessons`;
+    progressLabel.textContent =
+        `${completedCount} of ${totalLessons} lessons`;
+
     progressFill.style.width = `${percentage}%`;
     progressTrack.setAttribute("aria-valuenow", String(percentage));
 
@@ -254,15 +380,18 @@ function renderStatistics(completedLessons) {
 /**
  * Render earned and locked achievements.
  * @param {number} completedCount
+ * @returns {void}
  */
 function renderAchievements(completedCount) {
     achievementList.replaceChildren();
 
     achievements.forEach((achievement) => {
-        const earned = completedCount >= achievement.requiredLessons;
+        const earned =
+            completedCount >= achievement.requiredLessons;
 
         const card = document.createElement("article");
-        card.className = `achievement-card ${earned ? "earned" : "locked"}`;
+        card.className =
+            `achievement-card ${earned ? "earned" : "locked"}`;
 
         const icon = document.createElement("span");
         icon.className = "achievement-icon";
@@ -287,6 +416,7 @@ function renderAchievements(completedCount) {
 /**
  * Find the next incomplete lesson and update navigation.
  * @param {number[]} completedLessons
+ * @returns {void}
  */
 function renderNextLesson(completedLessons) {
     const nextIndex = lessonTitles.findIndex(
@@ -294,11 +424,15 @@ function renderNextLesson(completedLessons) {
     );
 
     if (nextIndex === -1) {
-        nextLessonTitle.textContent = "You've completed the adventure! 🏆";
+        nextLessonTitle.textContent =
+            "You've completed the adventure! 🏆";
+
         nextLessonMessage.textContent =
             "All ten lessons are complete. Keep practising your Python skills!";
+
         nextLessonButton.textContent = "Review Lessons →";
         nextLessonButton.href = "../lessons/index.html";
+
         resumeButton.textContent = "Review Lessons →";
         resumeButton.href = "../lessons/index.html";
         return;
@@ -308,18 +442,22 @@ function renderNextLesson(completedLessons) {
     const title = lessonTitles[nextIndex];
     const lessonUrl = `../lessons/index.html?lesson=${lessonNumber}`;
 
-    nextLessonTitle.textContent = `Lesson ${lessonNumber}: ${title}`;
+    nextLessonTitle.textContent =
+        `Lesson ${lessonNumber}: ${title}`;
+
     nextLessonMessage.textContent =
         `You're ready for your next step: ${title}.`;
+
     nextLessonButton.textContent = "Continue This Lesson →";
     nextLessonButton.href = lessonUrl;
     resumeButton.href = lessonUrl;
 }
 
 /**
- * Render the personalised path with up to three incomplete lessons.
+ * Render up to three incomplete lessons.
  * This function reads progress but never changes saved progress.
  * @param {number[]} completedLessons
+ * @returns {void}
  */
 function renderLearningPath(completedLessons) {
     learningPathList.replaceChildren();
@@ -358,10 +496,12 @@ function renderLearningPath(completedLessons) {
         content.className = "learning-path-content";
 
         const title = document.createElement("h3");
-        title.textContent = `Lesson ${lessonNumber}: ${lesson.title}`;
+        title.textContent =
+            `Lesson ${lessonNumber}: ${lesson.title}`;
 
         const description = document.createElement("p");
-        description.textContent = "Continue building your Python skills.";
+        description.textContent =
+            "Continue building your Python skills.";
 
         const link = document.createElement("a");
         link.className = "learning-path-link";
@@ -381,6 +521,7 @@ function renderLearningPath(completedLessons) {
 /**
  * Display completed lessons.
  * @param {number[]} completedLessons
+ * @returns {void}
  */
 function renderCompletedLessons(completedLessons) {
     completedLessonsList.replaceChildren();
@@ -390,6 +531,7 @@ function renderCompletedLessons(completedLessons) {
         emptyMessage.className = "empty-message";
         emptyMessage.textContent =
             "No lessons completed yet. Finish your first lesson and it will appear here.";
+
         completedLessonsList.append(emptyMessage);
         return;
     }
@@ -416,6 +558,7 @@ function renderCompletedLessons(completedLessons) {
 
 /**
  * Render the dashboard from saved lesson progress.
+ * @returns {void}
  */
 function renderDashboard() {
     const completedLessons = loadProgress();
@@ -431,16 +574,41 @@ function renderDashboard() {
 currentYearElement.textContent = String(new Date().getFullYear());
 
 const savedDisplayName = loadDisplayName();
+
 renderWelcome(savedDisplayName);
+
 displayNameInput.value =
-    savedDisplayName === DEFAULT_DISPLAY_NAME ? "" : savedDisplayName;
+    savedDisplayName === DEFAULT_DISPLAY_NAME
+        ? ""
+        : savedDisplayName;
 
 profileForm.addEventListener("submit", (event) => {
     event.preventDefault();
     saveDisplayName();
 });
 
+// Render immediately from local storage.
 renderDashboard();
+
+/*
+ * Synchronize with the backend, then refresh the dashboard.
+ * If the API is unavailable, the helper retains local progress.
+ */
+if (
+    window.CodeJuniorProgress &&
+    typeof window.CodeJuniorProgress.syncProgress === "function"
+) {
+    void window.CodeJuniorProgress.syncProgress()
+        .then(() => {
+            renderDashboard();
+        })
+        .catch((error) => {
+            console.error(
+                "Unable to synchronize dashboard progress:",
+                error
+            );
+        });
+}
 
 /*
  * Refresh lesson progress if it changes in another browser tab.
@@ -450,9 +618,14 @@ window.addEventListener("storage", (event) => {
         renderDashboard();
     }
 
-    if (event.key === PROFILE_STORAGE_KEY || event.key === null) {
+    if (
+        event.key === PROFILE_STORAGE_KEY ||
+        event.key === null
+    ) {
         const name = loadDisplayName();
+
         renderWelcome(name);
+
         displayNameInput.value =
             name === DEFAULT_DISPLAY_NAME ? "" : name;
     }

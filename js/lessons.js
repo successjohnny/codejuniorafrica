@@ -506,17 +506,54 @@ function loadProgress() {
  *
  * @returns {void}
  */
+
+/**
+ * Save completed lessons locally and synchronize with the backend.
+ *
+ * Local storage is updated first so learning can continue when
+ * the backend is unavailable.
+ *
+ * @returns {void}
+ */
 function saveProgress() {
+  /** @type {number[]} */
+  const progress = [...new Set(
+    completedLessons.filter(isValidLessonIndex)
+  )].sort((a, b) => a - b);
+
+  completedLessons = progress;
+
   try {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(completedLessons)
+      JSON.stringify(progress)
     );
   } catch (error) {
     console.warn(
-      "Lesson progress could not be saved.",
+      "Lesson progress could not be saved locally.",
       error
     );
+  }
+
+  // Send validated progress to the API when the helper is available.
+  if (
+    window.CodeJuniorProgress &&
+    typeof window.CodeJuniorProgress.saveProgress === "function"
+  ) {
+    void window.CodeJuniorProgress.saveProgress(progress)
+      .then((saved) => {
+        if (!saved) {
+          console.warn(
+            "Progress remains in local storage; backend sync can be retried."
+          );
+        }
+      })
+      .catch((error) => {
+        console.warn(
+          "Backend progress synchronization failed.",
+          error
+        );
+      });
   }
 }
 
