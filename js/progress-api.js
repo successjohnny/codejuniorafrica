@@ -8,7 +8,8 @@
 
     /** @type {string} */
     const API_BASE_URL =
-        window.CODEJUNIOR_API_BASE_URL || "http://127.0.0.1:8001";
+        window.CODEJUNIOR_API_BASE_URL ||
+        "https://codejuniorafrica.onrender.com";
 
     /**
      * Validate, deduplicate, and sort lesson indexes.
@@ -210,4 +211,3 @@
         syncProgress
     });
 })();
-
