@@ -26,6 +26,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        # Deployed frontend
+        "https://codejuniorafrica.pages.dev",
+
+        # Local development
         "http://127.0.0.1:8000",
         "http://localhost:8000",
         "http://127.0.0.1:5500",
