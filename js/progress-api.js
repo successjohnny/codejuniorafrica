@@ -21,15 +21,17 @@
             return [];
         }
 
-        return [...new Set(
-            value.filter(
-                (index) =>
-                    typeof index === "number" &&
-                    Number.isInteger(index) &&
-                    index >= 0 &&
-                    index < LESSON_COUNT
+        return [
+            ...new Set(
+                value.filter(
+                    (index) =>
+                        typeof index === "number" &&
+                        Number.isInteger(index) &&
+                        index >= 0 &&
+                        index < LESSON_COUNT
+                )
             )
-        )].sort((a, b) => a - b);
+        ].sort((a, b) => a - b);
     }
 
     /**
@@ -46,6 +48,7 @@
 
             /** @type {unknown} */
             const parsed = JSON.parse(stored);
+
             return normalizeProgress(parsed);
         } catch (error) {
             console.warn("Could not read cached progress.", error);
@@ -95,6 +98,7 @@
                         .slice(2)}`;
 
             localStorage.setItem(LEARNER_ID_KEY, learnerId);
+
             return learnerId;
         } catch (error) {
             console.warn("Could not persist the learner ID.", error);
@@ -126,6 +130,7 @@
                 console.warn(
                     `Progress API save failed: HTTP ${response.status}.`
                 );
+
                 return false;
             }
 
@@ -135,6 +140,7 @@
                 "Progress API unavailable; local progress is retained.",
                 error
             );
+
             return false;
         }
     }
@@ -142,26 +148,32 @@
     /**
      * Synchronize local and backend progress.
      *
-     * Non-empty local progress takes priority to prevent a stale
-     * backend record from overwriting current browser progress.
-     * If local progress is empty, existing backend progress can
-     * be restored. If no backend record exists, local progress
-     * is uploaded.
+     * Local progress is re-read after network requests so that
+     * changes made while a request is pending are not overwritten
+     * by an earlier, stale snapshot.
      *
      * @returns {Promise<number[]>}
      */
     async function syncProgress() {
         const learnerId = getLearnerId();
-        const localProgress = readLocalProgress();
 
         try {
             const response = await fetch(
                 `${API_BASE_URL}/api/progress/${encodeURIComponent(learnerId)}`
             );
 
+            // Re-read local progress only after the network request
+            // completes. The original snapshot may now be outdated.
+            const latestLocalProgress = readLocalProgress();
+
             if (response.status === 404) {
-                await saveProgress(localProgress);
-                return localProgress;
+                // No backend record exists. Preserve and upload the
+                // latest locally saved progress.
+                await saveProgress(latestLocalProgress);
+
+                // Return the current local value in case it changed
+                // while the save request was pending.
+                return readLocalProgress();
             }
 
             if (!response.ok) {
@@ -178,20 +190,37 @@
                 payload === null ||
                 !("completed_lessons" in payload)
             ) {
-                throw new Error("Progress API returned an invalid response.");
+                throw new Error(
+                    "Progress API returned an invalid response."
+                );
             }
 
             /** @type {unknown} */
             const backendProgress = payload.completed_lessons;
-            const normalizedBackend = normalizeProgress(backendProgress);
 
-            if (localProgress.length > 0) {
-                // Keep current local progress and update the backend.
-                await saveProgress(localProgress);
-                return localProgress;
+            const normalizedBackend =
+                normalizeProgress(backendProgress);
+
+            // Local progress takes priority when it exists.
+            if (latestLocalProgress.length > 0) {
+                await saveProgress(latestLocalProgress);
+
+                return readLocalProgress();
             }
 
-            // Restore backend progress when no lessons are cached locally.
+            // Re-check before restoring backend progress. If the
+            // learner saved progress while the response body was
+            // being processed, preserve that newer local progress.
+            const currentLocalProgress = readLocalProgress();
+
+            if (currentLocalProgress.length > 0) {
+                await saveProgress(currentLocalProgress);
+
+                return readLocalProgress();
+            }
+
+            // Restore backend progress only when local progress
+            // is still empty.
             return writeLocalProgress(normalizedBackend);
         } catch (error) {
             console.warn(
@@ -199,7 +228,8 @@
                 error
             );
 
-            return localProgress;
+            // Do not return an old snapshot after a network failure.
+            return readLocalProgress();
         }
     }
 
