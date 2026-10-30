@@ -5,12 +5,16 @@
   "private": true,
   "description": "CodeJuniorAfrica learning platform",
   "scripts": {
+    "dev": "concurrently --kill-others --names backend,frontend --prefix-colors blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "bash run.sh",
+    "dev:frontend": "python3 -m http.server 8001 --bind 127.0.0.1",
     "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.worker.json",
     "test:e2e": "playwright test tests/learning-centre.spec.js tests/dashboard.spec.js tests/parent-dashboard.spec.js tests/learning-path.spec.js tests/profile-challenge.spec.js",
     "test:pyodide": "playwright test tests/python-playground.integration.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1",
+    "concurrently": "10.0.6",
     "typescript": "5.9.3"
   }
 }
