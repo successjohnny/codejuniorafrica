@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Practise HTML and CSS by building your own personal profile webpage."
+  >
+  <title>Personal Profile Challenge | CodeJuniorAfrica</title>
+  <link rel="stylesheet" href="../../css/profile-challenge.css">
+  <script src="../../js/profile-challenge.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../index.html">CodeJuniorAfrica</a>
+    <a class="back-link" href="../index.html">← Back to Website Course</a>
+  </header>
+
+  <main class="page-container">
+    <section class="hero">
+      <p class="eyebrow">HANDS-ON CHALLENGE</p>
+      <h1>Build Your Personal Profile</h1>
+      <p>
+        Put your HTML and CSS knowledge into practice.
+        Create a webpage that introduces you to the world!
+      </p>
+    </section>
+
+    <section class="instructions panel">
+      <h2>Your mission</h2>
+      <p>Create a profile page containing these elements:</p>
+      <ul>
+        <li>Your name as a main heading.</li>
+        <li>A short introduction about yourself.</li>
+        <li>A list of at least three hobbies or interests.</li>
+        <li>Your favourite school subject or area of learning.</li>
+        <li>CSS styling with colours, spacing and borders.</li>
+      </ul>
+      <p class="tip">
+        Tip: Change the example code first, then experiment with your own ideas.
+      </p>
+    </section>
+
+    <section class="editor-section panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">YOUR WORKSPACE</p>
+          <h2>Write your code</h2>
+        </div>
+        <span class="beginner-label">Beginner</span>
+      </div>
+
+      <label for="html-code">HTML</label>
+      <textarea
+        id="html-code"
+        spellcheck="false"
+        autocapitalize="off"
+        autocomplete="off"
+        aria-describedby="html-help"
+      ></textarea>
+      <p id="html-help" class="field-help">
+        HTML defines the content and structure of your profile.
+      </p>
+
+      <label for="css-code">CSS</label>
+      <textarea
+        id="css-code"
+        spellcheck="false"
+        autocapitalize="off"
+        autocomplete="off"
+        aria-describedby="css-help"
+      ></textarea>
+      <p id="css-help" class="field-help">
+        CSS controls colours, fonts, spacing and layout.
+      </p>
+
+      <div class="editor-actions">
+        <button type="button" id="preview-button" class="primary-button">
+          Run Preview
+        </button>
+        <button type="button" id="reset-button" class="secondary-button">
+          Reset Code
+        </button>
+      </div>
+      <p id="editor-message" class="status-message" role="status" aria-live="polite">
+        Edit the code and select Run Preview.
+      </p>
+    </section>
+
+    <section class="preview-section panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LIVE RESULT</p>
+          <h2>Your profile webpage</h2>
+        </div>
+      </div>
+      <iframe
+        id="website-preview"
+        title="Preview of your personal profile webpage"
+        sandbox=""
+        referrerpolicy="no-referrer"
+      ></iframe>
+    </section>
+
+    <section class="checklist-section panel">
+      <h2>Challenge checklist</h2>
+      <p>Tick each item when your webpage meets the requirement.</p>
+
+      <label class="check-item">
+        <input type="checkbox">
+        <span>My page has a main heading with my name.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox">
+        <span>My page has a short personal introduction.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox">
+        <span>I included at least three hobbies or interests.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox">
+        <span>I used CSS to style my page.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox">
+        <span>I ran the preview and checked my work.</span>
+      </label>
+
+      <p id="checklist-message" class="status-message" role="status">
+        Complete the checklist as you work.
+      </p>
+    </section>
+
+    <section class="finish-card">
+      <h2>Keep learning!</h2>
+      <p>
+        Well done for practising your HTML and CSS.
+        Try changing your colours, adding sections and improving your layout.
+      </p>
+      <a class="primary-button link-button" href="../index.html">
+        Return to the Website Course
+      </a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 CodeJuniorAfrica · Learn by building.</p>
+  </footer>
+</body>
+</html>
