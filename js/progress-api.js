@@ -6,10 +6,16 @@
     const LEARNER_ID_KEY = "codejuniorafrica_learner_id_v1";
     const LESSON_COUNT = 10;
 
+    const isLocalHost =
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "localhost";
+
     /** @type {string} */
     const API_BASE_URL =
         window.CODEJUNIOR_API_BASE_URL ||
-        "https://codejuniorafrica.onrender.com";
+        (isLocalHost
+            ? "http://127.0.0.1:8000"
+            : "https://codejuniorafrica.onrender.com");
 
     /**
      * Validate, deduplicate, and sort lesson indexes.
