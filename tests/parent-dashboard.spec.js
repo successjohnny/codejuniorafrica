@@ -1,4 +1,3 @@
-
 // @ts-check
 "use strict";
 
@@ -95,12 +94,17 @@ test("shows earned achievements at the correct milestone", async ({ page }) => {
 });
 
 test("handles a fully completed course", async ({ page }) => {
-    await page.evaluate((key) => {
-        localStorage.setItem(
-            key,
-            JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
-        );
-    }, PROGRESS_KEY);
+    const allLessonIndexes = Array.from(
+        { length: 15 },
+        (_value, index) => index
+    );
+
+    await page.evaluate(({ key, lessons }) => {
+        localStorage.setItem(key, JSON.stringify(lessons));
+    }, {
+        key: PROGRESS_KEY,
+        lessons: allLessonIndexes
+    });
 
     await page.reload();
 
@@ -133,14 +137,21 @@ test("ignores invalid and duplicate lesson indexes", async ({ page }) => {
 
     await page.reload();
 
+    // Valid unique indexes are 0, 2, and 10.
     await expect(page.locator("#parent-completed-count"))
-        .toHaveText("2 of 15");
+        .toHaveText("3 of 15");
 
     await expect(page.locator("#parent-progress-percentage"))
-        .toHaveText("13%");
+        .toHaveText("20%");
+
+    await expect(page.locator("#parent-remaining-count"))
+        .toHaveText("12");
+
+    await expect(page.locator("#parent-progress-track"))
+        .toHaveAttribute("aria-valuenow", "20");
 
     await expect(page.locator("#parent-completed-lessons li"))
-        .toHaveCount(2);
+        .toHaveCount(3);
 });
 
 test("does not change the learner's saved progress", async ({ page }) => {

@@ -1,4 +1,3 @@
-
 // @ts-check
 "use strict";
 
@@ -82,7 +81,7 @@ test("updates progress after completing two lessons", async ({ page }) => {
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "20"
+    "13"
   );
 });
 
@@ -125,12 +124,18 @@ test("continue learning opens the next incomplete lesson", async ({ page }) => {
 });
 
 test("shows the course-complete state when all lessons are completed", async ({ page }) => {
-  await page.evaluate(() => {
+  const allLessonIndexes = Array.from(
+    { length: 15 },
+    (_value, index) => index
+  );
+
+  await page.evaluate((lessons) => {
     localStorage.setItem(
       "codejuniorafrica_python_progress_v1",
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+      JSON.stringify(lessons)
     );
-  });
+  }, allLessonIndexes);
+
   await page.reload();
 
   await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
@@ -221,7 +226,7 @@ test("completes the data types lesson and updates progress", async ({ page }) =>
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "10"
+    "7"
   );
 });
 
@@ -231,18 +236,22 @@ test.describe("Python Playground page", () => {
       class MockWorker {
         onmessage = null;
         onerror = null;
+
         constructor() {
           window.setTimeout(() => {
             this.onmessage?.({ data: { type: "ready" } });
           }, 0);
         }
+
         postMessage(message) {
           if (message.type === "initialize") return;
+
           if (message.type === "run") {
             const code = message.code;
             let stdout = "Program finished without printing anything.";
             let stderr = "";
             let hasError = false;
+
             if (code.includes("print(") && code.includes("Hello from Python!")) {
               stdout = "Hello from Python!";
             } else if (code.includes("raise ValueError")) {
@@ -250,16 +259,22 @@ test.describe("Python Playground page", () => {
               stderr = "ValueError: example error";
               hasError = true;
             }
+
             window.setTimeout(() => {
-              this.onmessage?.({ data: { type: "result", stdout, stderr, hasError } });
+              this.onmessage?.({
+                data: { type: "result", stdout, stderr, hasError }
+              });
             }, 0);
           }
         }
+
         terminate() {}
       }
+
       // @ts-ignore - replace Worker with a predictable test double.
       window.Worker = MockWorker;
     });
+
     await page.goto("/playground/index.html");
   });
 
