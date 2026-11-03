@@ -1,5 +1,5 @@
 
- // @ts-check
+// @ts-check
 "use strict";
 
 const { test, expect } = require("@playwright/test");
@@ -65,7 +65,7 @@ test("shows the saved learner name and lesson progress", async ({ page }) => {
         .toHaveText("12");
 
     await expect(page.locator("#parent-progress-track"))
-        .toHaveAttribute("aria-valuenow", "30");
+        .toHaveAttribute("aria-valuenow", "20");
 
     await expect(page.locator("#parent-completed-lessons li"))
         .toHaveCount(3);

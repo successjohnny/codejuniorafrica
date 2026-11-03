@@ -19,7 +19,7 @@ test("displays the first Python lesson and fifteen lessons in total", async ({ p
     "Lesson 1 of 15"
   );
 
-  await expect(page.locator(".lesson-item")).toHaveCount(10);
+  await expect(page.locator(".lesson-item")).toHaveCount(15);
 
   await expect(page.locator("#progress-text")).toHaveText(
     "0 of 15 lessons completed"
