@@ -26,13 +26,13 @@ test("shows an empty report for a new learner", async ({ page }) => {
         .toHaveText("Young Coder");
 
     await expect(page.locator("#parent-completed-count"))
-        .toHaveText("0 of 10");
+        .toHaveText("0 of 15");
 
     await expect(page.locator("#parent-progress-percentage"))
         .toHaveText("0%");
 
     await expect(page.locator("#parent-remaining-count"))
-        .toHaveText("10");
+        .toHaveText("15");
 
     await expect(page.locator("#parent-badges-count"))
         .toHaveText("0 of 3");
@@ -56,13 +56,13 @@ test("shows the saved learner name and lesson progress", async ({ page }) => {
         .toHaveText("StarCoder");
 
     await expect(page.locator("#parent-completed-count"))
-        .toHaveText("3 of 10");
+        .toHaveText("3 of 15");
 
     await expect(page.locator("#parent-progress-percentage"))
-        .toHaveText("30%");
+        .toHaveText("20%");
 
     await expect(page.locator("#parent-remaining-count"))
-        .toHaveText("7");
+        .toHaveText("12");
 
     await expect(page.locator("#parent-progress-track"))
         .toHaveAttribute("aria-valuenow", "30");
@@ -98,14 +98,14 @@ test("handles a fully completed course", async ({ page }) => {
     await page.evaluate((key) => {
         localStorage.setItem(
             key,
-            JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+            JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
         );
     }, PROGRESS_KEY);
 
     await page.reload();
 
     await expect(page.locator("#parent-completed-count"))
-        .toHaveText("10 of 10");
+        .toHaveText("15 of 15");
 
     await expect(page.locator("#parent-progress-percentage"))
         .toHaveText("100%");
@@ -120,7 +120,7 @@ test("handles a fully completed course", async ({ page }) => {
         .toHaveCount(3);
 
     await expect(page.locator("#parent-next-lesson"))
-        .toContainText("All ten lessons are complete");
+        .toContainText("All fifteen lessons are complete");
 });
 
 test("ignores invalid and duplicate lesson indexes", async ({ page }) => {
@@ -134,10 +134,10 @@ test("ignores invalid and duplicate lesson indexes", async ({ page }) => {
     await page.reload();
 
     await expect(page.locator("#parent-completed-count"))
-        .toHaveText("2 of 10");
+        .toHaveText("2 of 15");
 
     await expect(page.locator("#parent-progress-percentage"))
-        .toHaveText("20%");
+        .toHaveText("13%");
 
     await expect(page.locator("#parent-completed-lessons li"))
         .toHaveCount(2);

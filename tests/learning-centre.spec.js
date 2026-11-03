@@ -10,19 +10,19 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
-test("displays the first Python lesson and ten lessons in total", async ({ page }) => {
+test("displays the first Python lesson and fifteen lessons in total", async ({ page }) => {
   await expect(page.locator("#lesson-title")).toHaveText(
     "What Is Coding?"
   );
 
   await expect(page.locator("#lesson-number")).toHaveText(
-    "Lesson 1 of 10"
+    "Lesson 1 of 15"
   );
 
   await expect(page.locator(".lesson-item")).toHaveCount(10);
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "0 of 10 lessons completed"
+    "0 of 15 lessons completed"
   );
 });
 
@@ -56,13 +56,13 @@ test("saves completed progress after refreshing", async ({ page }) => {
   await page.locator("#quiz-options button").nth(0).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await page.reload();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await expect(
@@ -77,7 +77,7 @@ test("updates progress after completing two lessons", async ({ page }) => {
   await page.locator("#quiz-options button").nth(1).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "2 of 10 lessons completed"
+    "2 of 15 lessons completed"
   );
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
@@ -107,7 +107,7 @@ test("unlocks the first badge after completing one lesson and keeps it after ref
 
   await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 });
 
@@ -128,7 +128,7 @@ test("shows the course-complete state when all lessons are completed", async ({ 
   await page.evaluate(() => {
     localStorage.setItem(
       "codejuniorafrica_python_progress_v1",
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
     );
   });
   await page.reload();
@@ -216,7 +216,7 @@ test("completes the data types lesson and updates progress", async ({ page }) =>
   );
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await expect(page.locator("#progress-track")).toHaveAttribute(

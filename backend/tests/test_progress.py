@@ -17,9 +17,13 @@ def test_rejects_negative_lesson_indexes():
         validate_completed_lessons([-1, 2])
 
 
+def test_accepts_last_lesson_index():
+    assert validate_completed_lessons([14]) == [14]
+
+
 def test_rejects_indexes_outside_lesson_range():
     with pytest.raises(ValueError):
-        validate_completed_lessons([0, 10])
+        validate_completed_lessons([0, 15])
 
 
 def test_accepts_empty_progress():

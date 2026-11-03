@@ -99,7 +99,7 @@ def test_reject_invalid_lesson_index():
         "/api/progress",
         json={
             "learner_id": "learner-001",
-            "completed_lessons": [0, 10],
+            "completed_lessons": [0, 15],
         },
     )
 
