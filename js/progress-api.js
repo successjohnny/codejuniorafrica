@@ -4,7 +4,7 @@
 (() => {
     const PROGRESS_KEY = "codejuniorafrica_python_progress_v1";
     const LEARNER_ID_KEY = "codejuniorafrica_learner_id_v1";
-    const LESSON_COUNT = 10;
+    const LESSON_COUNT = 15;
 
     const isLocalHost =
         window.location.hostname === "127.0.0.1" ||

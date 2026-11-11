@@ -189,8 +189,93 @@ const lessons = [
       "name"
     ],
     answer: 0,
-    success: "Wonderful! You have completed all ten Python lessons!",
+    success: "Great work on this lesson! Five more Python lessons await you.",
     hint: "The function returns a greeting using the name Amina."
+  },
+  {
+    title: "Working with Lists",
+    description:
+      "A list stores several values in one variable. Lists help us organise collections such as scores, names and favourite foods.",
+    code: 'scores: list[int] = [85, 90, 78]\nscores.append(95)\nprint(scores[0])\nprint(scores)',
+    explanation:
+      "The variable scores is annotated as list[int], meaning it is intended to contain integers. Lists use square brackets. Python starts counting list positions at index 0, so scores[0] is 85. The append() method adds a new item to the end of the list. Type annotations describe intended types but do not automatically enforce them at runtime.",
+    question: "What value will scores[0] display?",
+    options: [
+      "90",
+      "85",
+      "95"
+    ],
+    answer: 1,
+    success: "Excellent! You can now store and access values in a list.",
+    hint: "Python list positions start at index 0."
+  },
+  {
+    title: "Understanding Dictionaries",
+    description:
+      "A dictionary stores information as key–value pairs. It is useful when we want to describe something using named pieces of information.",
+    code: 'student: dict[str, str | int] = {\n    "name": "Ada",\n    "age": 12\n}\nprint(student["name"])\nprint(student["age"])',
+    explanation:
+      "The variable student is annotated as dict[str, str | int]. Its keys are strings, while its values can be strings or integers. The key name points to Ada, and the key age points to 12. We use the key inside square brackets to retrieve its value. The | symbol means either type is allowed by this annotation.",
+    question: "Which value is stored under the key age?",
+    options: [
+      "Ada",
+      "12",
+      "name"
+    ],
+    answer: 1,
+    success: "Well done! You understand how dictionaries organise information.",
+    hint: "Look for the value written after the age key."
+  },
+  {
+    title: "Getting User Input and Converting Types",
+    description:
+      "Python can ask users to enter information. We often need to convert that information into another data type before using it in calculations.",
+    code: 'age_text: str = input("Enter your age: ")\nage: int = int(age_text)\nprint(age + 1)',
+    explanation:
+      "The input() function always returns a string (str), even when the user types digits. The int() function converts a valid whole-number string into an integer (int). The variable age_text is a str, while age is intended to be an int. If the user enters text that is not a valid whole number, int() raises a ValueError.",
+    question: "What data type does input() return?",
+    options: [
+      "int",
+      "bool",
+      "str"
+    ],
+    answer: 2,
+    success: "Great job! You can now explain why user input sometimes needs type conversion.",
+    hint: "Even when someone types 12, input() first returns text."
+  },
+  {
+    title: "Repeating Actions with while Loops",
+    description:
+      "A while loop repeats instructions as long as a condition is True. It is useful when we do not know in advance how many repetitions are needed.",
+    code: 'count: int = 1\n\nwhile count <= 3:\n    print(count)\n    count += 1',
+    explanation:
+      "The variable count has type int. Python checks whether count <= 3 before each repetition. The condition produces a bool value: True or False. The count += 1 instruction increases count by one each time. When count becomes 4, the condition is False and the loop stops. Always make sure a while loop can eventually stop.",
+    question: "What happens when count becomes 4?",
+    options: [
+      "The loop stops.",
+      "The loop starts again at 1.",
+      "The loop runs forever."
+    ],
+    answer: 0,
+    success: "Fantastic! You understand how a while loop repeats and stops.",
+    hint: "Check whether 4 is less than or equal to 3."
+  },
+  {
+    title: "Handling Errors with try and except",
+    description:
+      "Sometimes a program receives information it cannot use. Python's try and except blocks help us handle certain errors without letting the program stop unexpectedly.",
+    code: 'age_text: str = input("Enter your age: ")\n\ntry:\n    age: int = int(age_text)\n    print(age)\nexcept ValueError:\n    print("Please enter a whole number.")',
+    explanation:
+      "The try block contains instructions that might raise an error. Converting invalid text to an integer raises ValueError. The except ValueError block handles that specific error and displays a helpful message. The variable age_text has type str, and age is intended to have type int. Handling errors makes programs more reliable, but it does not mean every possible error is automatically handled.",
+    question: "Which block handles an invalid integer conversion?",
+    options: [
+      "The if block",
+      "The except ValueError block",
+      "The while block"
+    ],
+    answer: 1,
+    success: "Excellent! You have completed all fifteen Python lessons. Keep practising and building!",
+    hint: "Look for the block that names the ValueError exception."
   }
 ];
 
@@ -355,8 +440,8 @@ const achievements = [
     id: "python-champion",
     icon: "🏆",
     title: "Python Champion",
-    description: "Complete all ten Python lessons.",
-    requiredLessons: 10
+    description: "Complete all fifteen Python lessons.",
+    requiredLessons: 15
   }
 ];
 

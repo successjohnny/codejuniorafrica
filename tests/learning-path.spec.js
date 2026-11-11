@@ -1,11 +1,11 @@
-
- // @ts-check
+// @ts-check
 "use strict";
 
 const { test, expect } = require("@playwright/test");
 
 const STORAGE_KEY = "codejuniorafrica_python_progress_v1";
 const PROFILE_STORAGE_KEY = "codejuniorafrica_learner_profile_v1";
+const TOTAL_LESSONS = 15;
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/dashboard/index.html");
@@ -103,18 +103,23 @@ test("does not recommend lessons already completed", async ({ page }) => {
 });
 
 test("shows a completion message when all lessons are complete", async ({ page }) => {
-  await page.evaluate((key) => {
-    localStorage.setItem(
-      key,
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    );
-  }, STORAGE_KEY);
+  const allLessonIndexes = Array.from(
+    { length: TOTAL_LESSONS },
+    (_value, index) => index
+  );
+
+  await page.evaluate(({ key, lessons }) => {
+    localStorage.setItem(key, JSON.stringify(lessons));
+  }, {
+    key: STORAGE_KEY,
+    lessons: allLessonIndexes
+  });
 
   await page.reload();
 
   await expect(
     page.locator("#learning-path-message")
-  ).toContainText("completed all ten Python lessons");
+  ).toContainText("completed all fifteen Python lessons");
 
   await expect(
     page.locator("#learning-path-list .learning-path-item")
@@ -162,12 +167,17 @@ test("does not modify the learner's saved progress", async ({ page }) => {
 });
 
 test("offers only the remaining lessons when fewer than three remain", async ({ page }) => {
-  await page.evaluate((key) => {
-    localStorage.setItem(
-      key,
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7])
-    );
-  }, STORAGE_KEY);
+  const completedLessonIndexes = Array.from(
+    { length: TOTAL_LESSONS - 2 },
+    (_value, index) => index
+  );
+
+  await page.evaluate(({ key, lessons }) => {
+    localStorage.setItem(key, JSON.stringify(lessons));
+  }, {
+    key: STORAGE_KEY,
+    lessons: completedLessonIndexes
+  });
 
   await page.reload();
 
@@ -176,10 +186,10 @@ test("offers only the remaining lessons when fewer than three remain", async ({ 
   await expect(recommendations).toHaveCount(2);
 
   await expect(recommendations.nth(0)).toContainText(
-    "Lesson 9: Repeating Actions with Loops"
+    "Lesson 14: Repeating Actions with while Loops"
   );
 
   await expect(recommendations.nth(1)).toContainText(
-    "Lesson 10: Creating Your Own Functions"
+    "Lesson 15: Handling Errors with try and except"
   );
 });

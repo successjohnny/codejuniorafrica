@@ -1,4 +1,3 @@
-
 // @ts-check
 "use strict";
 
@@ -10,19 +9,19 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
-test("displays the first Python lesson and ten lessons in total", async ({ page }) => {
+test("displays the first Python lesson and fifteen lessons in total", async ({ page }) => {
   await expect(page.locator("#lesson-title")).toHaveText(
     "What Is Coding?"
   );
 
   await expect(page.locator("#lesson-number")).toHaveText(
-    "Lesson 1 of 10"
+    "Lesson 1 of 15"
   );
 
-  await expect(page.locator(".lesson-item")).toHaveCount(10);
+  await expect(page.locator(".lesson-item")).toHaveCount(15);
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "0 of 10 lessons completed"
+    "0 of 15 lessons completed"
   );
 });
 
@@ -56,13 +55,13 @@ test("saves completed progress after refreshing", async ({ page }) => {
   await page.locator("#quiz-options button").nth(0).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await page.reload();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await expect(
@@ -77,12 +76,12 @@ test("updates progress after completing two lessons", async ({ page }) => {
   await page.locator("#quiz-options button").nth(1).click();
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "2 of 10 lessons completed"
+    "2 of 15 lessons completed"
   );
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "20"
+    "13"
   );
 });
 
@@ -107,7 +106,7 @@ test("unlocks the first badge after completing one lesson and keeps it after ref
 
   await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 });
 
@@ -125,12 +124,18 @@ test("continue learning opens the next incomplete lesson", async ({ page }) => {
 });
 
 test("shows the course-complete state when all lessons are completed", async ({ page }) => {
-  await page.evaluate(() => {
+  const allLessonIndexes = Array.from(
+    { length: 15 },
+    (_value, index) => index
+  );
+
+  await page.evaluate((lessons) => {
     localStorage.setItem(
       "codejuniorafrica_python_progress_v1",
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+      JSON.stringify(lessons)
     );
-  });
+  }, allLessonIndexes);
+
   await page.reload();
 
   await expect(page.locator('[data-achievement-id="first-step"]')).toHaveClass(/unlocked/);
@@ -216,12 +221,12 @@ test("completes the data types lesson and updates progress", async ({ page }) =>
   );
 
   await expect(page.locator("#progress-text")).toHaveText(
-    "1 of 10 lessons completed"
+    "1 of 15 lessons completed"
   );
 
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "10"
+    "7"
   );
 });
 
@@ -231,18 +236,22 @@ test.describe("Python Playground page", () => {
       class MockWorker {
         onmessage = null;
         onerror = null;
+
         constructor() {
           window.setTimeout(() => {
             this.onmessage?.({ data: { type: "ready" } });
           }, 0);
         }
+
         postMessage(message) {
           if (message.type === "initialize") return;
+
           if (message.type === "run") {
             const code = message.code;
             let stdout = "Program finished without printing anything.";
             let stderr = "";
             let hasError = false;
+
             if (code.includes("print(") && code.includes("Hello from Python!")) {
               stdout = "Hello from Python!";
             } else if (code.includes("raise ValueError")) {
@@ -250,16 +259,22 @@ test.describe("Python Playground page", () => {
               stderr = "ValueError: example error";
               hasError = true;
             }
+
             window.setTimeout(() => {
-              this.onmessage?.({ data: { type: "result", stdout, stderr, hasError } });
+              this.onmessage?.({
+                data: { type: "result", stdout, stderr, hasError }
+              });
             }, 0);
           }
         }
+
         terminate() {}
       }
+
       // @ts-ignore - replace Worker with a predictable test double.
       window.Worker = MockWorker;
     });
+
     await page.goto("/playground/index.html");
   });
 

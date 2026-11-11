@@ -4,7 +4,7 @@
 const PROGRESS_STORAGE_KEY = "codejuniorafrica_python_progress_v1";
 const PROFILE_STORAGE_KEY = "codejuniorafrica_learner_profile_v1";
 const DEFAULT_DISPLAY_NAME = "Young Coder";
-const TOTAL_LESSONS = 10;
+const TOTAL_LESSONS = 15;
 const MAX_DISPLAY_NAME_LENGTH = 30;
 
 const lessonTitles = [
@@ -17,7 +17,12 @@ const lessonTitles = [
     "Working with Strings",
     "Making Decisions with if and else",
     "Repeating Actions with Loops",
-    "Creating Your Own Functions"
+    "Creating Your Own Functions",
+    "Working with Lists",
+    "Understanding Dictionaries",
+    "Getting User Input and Converting Types",
+    "Repeating Actions with while Loops",
+    "Handling Errors with try and except"
 ];
 
 const achievements = [
@@ -39,8 +44,8 @@ const achievements = [
         id: "python-champion",
         icon: "🏆",
         title: "Python Champion",
-        description: "Complete all ten Python lessons.",
-        requiredLessons: 10
+        description: "Complete all fifteen Python lessons.",
+        requiredLessons: 15
     }
 ];
 
@@ -159,7 +164,7 @@ function renderSummary(completedLessons) {
 
     if (completedCount === TOTAL_LESSONS) {
         message =
-            "All ten lessons are complete. Congratulations to your Python Champion! 🎉";
+            "All fifteen lessons are complete. Congratulations to your Python Champion! 🎉";
     } else if (completedCount === 0) {
         message =
             "The learning journey is ready to begin. Encourage your learner to try the first lesson.";
@@ -243,7 +248,7 @@ function renderLessonDetails(completedLessons) {
 
     if (nextIndex === -1) {
         getRequiredElement("parent-next-lesson").textContent =
-            "All ten lessons are complete! Celebrate this milestone and encourage further practice.";
+            "All fifteen lessons are complete! Celebrate this milestone and encourage further practice.";
     } else {
         getRequiredElement("parent-next-lesson").textContent =
             `Lesson ${nextIndex + 1}: ${lessonTitles[nextIndex]}. ` +

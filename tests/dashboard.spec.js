@@ -1,11 +1,11 @@
-
- // @ts-check
+// @ts-check
 "use strict";
 
 const { test, expect } = require("@playwright/test");
 
 const STORAGE_KEY = "codejuniorafrica_python_progress_v1";
 const PROFILE_STORAGE_KEY = "codejuniorafrica_learner_profile_v1";
+const TOTAL_LESSONS = 15;
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/dashboard/index.html");
@@ -28,7 +28,9 @@ test("shows the correct starting state for a new learner", async ({ page }) => {
   await expect(page.locator("#completed-count")).toHaveText("0");
   await expect(page.locator("#progress-percentage")).toHaveText("0%");
   await expect(page.locator("#badges-count")).toHaveText("0");
-  await expect(page.locator("#remaining-count")).toHaveText("10");
+  await expect(page.locator("#remaining-count")).toHaveText(
+    String(TOTAL_LESSONS)
+  );
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
     "0"
@@ -66,7 +68,7 @@ test("rejects a display name that is too short", async ({ page }) => {
   await page.locator("#display-name").fill("A");
 
   // Dispatch submit directly to test JavaScript validation even when
-  // the browser's built-in minlength validation would block a click.
+// the browser's built-in minlength validation would block a click.
   await page.locator("#profile-form").evaluate((form) => {
     form.dispatchEvent(
       new Event("submit", { bubbles: true, cancelable: true })
@@ -79,6 +81,7 @@ test("rejects a display name that is too short", async ({ page }) => {
   await expect(page.locator("#welcome-heading")).toHaveText(
     "Welcome back, Young Coder! 👋"
   );
+
   await expect.poll(async () => {
     return page.evaluate(
       (key) => localStorage.getItem(key),
@@ -136,11 +139,11 @@ test("shows saved progress and the next incomplete lesson", async ({ page }) => 
   await page.reload();
 
   await expect(page.locator("#completed-count")).toHaveText("3");
-  await expect(page.locator("#progress-percentage")).toHaveText("30%");
-  await expect(page.locator("#remaining-count")).toHaveText("7");
+  await expect(page.locator("#progress-percentage")).toHaveText("20%");
+  await expect(page.locator("#remaining-count")).toHaveText("12");
   await expect(page.locator("#progress-track")).toHaveAttribute(
     "aria-valuenow",
-    "30"
+    "20"
   );
 
   await expect(page.locator("#next-lesson-title")).toContainText(
@@ -180,19 +183,32 @@ test("unlocks achievements at the correct milestones", async ({ page }) => {
     })
   ).toHaveCount(1);
 
-  await page.evaluate((key) => {
-    localStorage.setItem(
-      key,
-      JSON.stringify([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    );
-  }, STORAGE_KEY);
+  const allLessonIndexes = Array.from(
+    { length: TOTAL_LESSONS },
+    (_value, index) => index
+  );
+
+  await page.evaluate(({ key, lessons }) => {
+    localStorage.setItem(key, JSON.stringify(lessons));
+  }, {
+    key: STORAGE_KEY,
+    lessons: allLessonIndexes
+  });
 
   await page.reload();
 
-  await expect(page.locator("#completed-count")).toHaveText("10");
+  await expect(page.locator("#completed-count")).toHaveText(
+    String(TOTAL_LESSONS)
+  );
   await expect(page.locator("#progress-percentage")).toHaveText("100%");
   await expect(page.locator("#remaining-count")).toHaveText("0");
   await expect(page.locator(".achievement-card.earned")).toHaveCount(3);
+  await expect(
+    page.locator(".achievement-card.earned").filter({
+      hasText: "Python Champion"
+    })
+  ).toHaveCount(1);
+
   await expect(page.locator("#next-lesson-title")).toContainText(
     "You've completed the adventure!"
   );

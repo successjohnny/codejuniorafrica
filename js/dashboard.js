@@ -18,7 +18,12 @@ const lessonTitles = [
     "Working with Strings",
     "Making Decisions with if and else",
     "Repeating Actions with Loops",
-    "Creating Your Own Functions"
+    "Creating Your Own Functions",
+    "Working with Lists",
+    "Understanding Dictionaries",
+    "Getting User Input and Converting Types",
+    "Repeating Actions with while Loops",
+    "Handling Errors with try and except"
 ];
 
 const achievements = [
@@ -40,8 +45,8 @@ const achievements = [
         id: "python-champion",
         icon: "🏆",
         title: "Python Champion",
-        description: "Complete all ten Python lessons.",
-        requiredLessons: 10
+        description: "Complete all fifteen Python lessons.",
+        requiredLessons: 15
     }
 ];
 
@@ -367,7 +372,7 @@ function renderStatistics(completedLessons) {
 
     if (completedCount === totalLessons) {
         progressMessage.textContent =
-            "Amazing work! You completed all ten Python lessons. You're a Python Champion! 🎉";
+            "Amazing work! You completed all fifteen Python lessons. You're a Python Champion! 🎉";
     } else if (completedCount === 0) {
         progressMessage.textContent =
             "Your coding adventure starts here. Complete your first lesson!";
@@ -428,7 +433,7 @@ function renderNextLesson(completedLessons) {
             "You've completed the adventure! 🏆";
 
         nextLessonMessage.textContent =
-            "All ten lessons are complete. Keep practising your Python skills!";
+            "All fifteen lessons are complete. Keep practising your Python skills!";
 
         nextLessonButton.textContent = "Review Lessons →";
         nextLessonButton.href = "../lessons/index.html";
@@ -474,7 +479,7 @@ function renderLearningPath(completedLessons) {
 
     if (recommendedLessons.length === 0) {
         learningPathMessage.textContent =
-            "Congratulations! You have completed all ten Python lessons. Your Python learning journey is just beginning!";
+            "Congratulations! You have completed all fifteen Python lessons. Your Python learning journey is just beginning!";
         return;
     }
 

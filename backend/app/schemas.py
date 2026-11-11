@@ -1,10 +1,11 @@
+from backend.app.constants import TOTAL_LESSONS
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ProgressUpdate(BaseModel):
     learner_id: str = Field(min_length=1, max_length=100)
-    completed_lessons: list[int] = Field(max_length=10)
+    completed_lessons: list[int] = Field(max_length=TOTAL_LESSONS)
 
     @field_validator("learner_id")
     @classmethod
