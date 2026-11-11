@@ -3,194 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
-    name="description"
-    content="Build your first game with blocks in the CodeJuniorAfrica Game Builder."
-  >
-  <title>CodeJunior Game Builder | CodeJuniorAfrica</title>
+  <meta name="description" content="Explore the jungle, collect three stars and discover the hidden treasure in this beginner-friendly coding game.">
+  <title>Jungle Treasure Adventure | CodeJuniorAfrica</title>
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/game-builder.css">
   <script src="../js/game-builder.js" defer></script>
-  <style>
-    .game-builder-section {
-      background: var(--light);
-    }
-
-    .game-builder-section .section-heading h1 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      line-height: 1.25;
-      margin: 12px 0 15px;
-    }
-
-    .game-builder-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .game-stage,
-    .game-controls {
-      height: 100%;
-    }
-
-    .stage-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .stage-heading h2,
-    .game-controls h2 {
-      font-size: 1.2rem;
-      line-height: 1.35;
-    }
-
-    .game-workspace {
-      display: block;
-      width: 100%;
-      height: auto;
-      border: 2px dashed #86efac;
-      border-radius: 14px;
-      background: #f0fdf4;
-    }
-
-    .game-controls .course-icon {
-      margin-bottom: 16px;
-    }
-
-    .control-group {
-      display: grid;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .control-group .btn,
-    .game-controls > .btn {
-      width: 100%;
-    }
-
-    .game-note {
-      margin: 18px 0 0;
-      color: var(--text);
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 800px) {
-      .game-builder-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .game-workspace {
-        min-height: 320px;
-      }
-    }
-  </style>
 </head>
 <body>
-
   <header class="site-header">
     <nav class="navbar container" aria-label="Main navigation">
       <a href="../index.html" class="logo">
         <span class="logo-icon" aria-hidden="true">&lt;/&gt;</span>
         CodeJunior<span>Africa</span>
       </a>
-      <a href="../index.html#courses" class="btn btn-outline">
-        ← Back to Courses
-      </a>
+      <a href="../index.html#courses" class="btn btn-outline">← Back to Courses</a>
     </nav>
   </header>
 
-  <main class="section game-builder-section">
-    <div class="container">
-      <div class="section-heading">
-        <span class="section-tag">GAME DEVELOPMENT</span>
-        <h1>CodeJunior Game Builder</h1>
-        <p>
-          Add blocks to your workspace, arrange your game pieces,
-          and press Run Game to see what happens.
-        </p>
-      </div>
+  <main class="adventure-page">
+    <section class="adventure-hero container">
+      <span class="adventure-kicker">🎮 GAME DEVELOPMENT · BEGINNER FRIENDLY</span>
+      <h1>Jungle Treasure <span>Adventure</span></h1>
+      <p>Help the explorer find the hidden treasure! Collect all three glowing stars, avoid the jungle logs and reach the treasure chest.</p>
+    </section>
 
-      <div class="game-builder-layout">
-        <section class="course-card game-stage" aria-labelledby="workspace-title">
-          <div class="stage-heading">
-            <h2 id="workspace-title">Game Workspace</h2>
-            <span class="course-level" id="game-status" role="status" aria-live="polite">
-              Ready to build
-            </span>
+    <section class="adventure-layout container" aria-label="Jungle adventure game">
+      <div class="game-panel">
+        <div class="game-panel-heading">
+          <div>
+            <span class="panel-eyebrow">YOUR MISSION</span>
+            <h2>Explore the jungle</h2>
           </div>
+          <div class="score-pill" aria-live="polite">
+            ⭐ <span id="score">0</span><span class="score-divider">/</span>3 stars
+          </div>
+        </div>
 
-          <canvas
-            id="game-canvas"
-            class="game-workspace"
-            width="640"
-            height="400"
-            tabindex="0"
-            aria-label="Game workspace"
-            aria-describedby="game-help"
-          >
+        <div class="canvas-wrap">
+          <canvas id="game-canvas" width="960" height="540" tabindex="0"
+            aria-label="Jungle game. Use arrow keys or WASD to move the explorer, collect three stars and reach the treasure."
+            aria-describedby="game-instructions">
             Your browser does not support the canvas element.
           </canvas>
-
-          <p id="game-help" class="game-note">
-            Add a player block, then use the arrow keys to move it.
-            Red obstacle blocks cannot be crossed.
-          </p>
-        </section>
-
-        <aside class="course-card game-controls" aria-labelledby="controls-title">
-          <div class="course-icon course-games" aria-hidden="true">🎮</div>
-          <h2 id="controls-title">Build Controls</h2>
-          <p>Choose a block, then run your game.</p>
-
-          <div class="control-group">
-            <button id="add-player" type="button" class="btn btn-outline">
-              + Add Player block
-            </button>
-            <button id="add-obstacle" type="button" class="btn btn-outline">
-              + Add Obstacle block
-            </button>
+          <div class="game-overlay" id="start-overlay">
+            <div class="overlay-card">
+              <span class="overlay-emoji" aria-hidden="true">🧭</span>
+              <h2>Ready, explorer?</h2>
+              <p>Three stars are hidden in the jungle. Find them, then unlock the treasure!</p>
+              <button class="btn btn-primary adventure-button" id="start-game" type="button">Start Adventure <span aria-hidden="true">→</span></button>
+            </div>
           </div>
+          <div class="game-overlay is-hidden" id="win-overlay">
+            <div class="overlay-card">
+              <span class="overlay-emoji" aria-hidden="true">🏆</span>
+              <h2>Treasure found!</h2>
+              <p>You collected every star and completed the adventure. Amazing work!</p>
+              <button class="btn btn-primary adventure-button" id="play-again" type="button">Play Again ↻</button>
+            </div>
+          </div>
+        </div>
 
-          <button id="run-game" type="button" class="btn btn-primary">
-            ▶ Run Game
-          </button>
-
-          <p class="game-note">
-            Tip: start with one player block, then add obstacles to make
-            your game more challenging.
-          </p>
-        </aside>
+        <div class="game-status-row">
+          <p id="game-status" role="status" aria-live="polite">Press Start Adventure when you're ready.</p>
+          <button id="restart-game" class="text-button" type="button">↻ Restart</button>
+        </div>
       </div>
-    </div>
+
+      <aside class="mission-panel">
+        <div class="mission-icon" aria-hidden="true">🗺️</div>
+        <span class="panel-eyebrow">THE EXPLORER'S GUIDE</span>
+        <h2>How to play</h2>
+        <ol class="mission-steps">
+          <li><span>1</span><p>Use the <strong>arrow keys</strong> or <strong>W A S D</strong> to move.</p></li>
+          <li><span>2</span><p>Collect all <strong>3 glowing stars</strong>.</p></li>
+          <li><span>3</span><p>Avoid the fallen jungle logs.</p></li>
+          <li><span>4</span><p>Reach the treasure chest to win!</p></li>
+        </ol>
+        <div class="control-hint">
+          <strong>Keyboard controls</strong>
+          <div class="key-grid" aria-label="Movement keys">
+            <kbd>↑</kbd><kbd>W</kbd><kbd>←</kbd><kbd>A</kbd><kbd>↓</kbd><kbd>S</kbd><kbd>→</kbd><kbd>D</kbd>
+          </div>
+        </div>
+        <div class="mobile-controls" aria-label="Touch movement controls">
+          <strong>Touch controls</strong>
+          <div class="direction-pad">
+            <button type="button" data-direction="up" aria-label="Move up">↑</button>
+            <button type="button" data-direction="left" aria-label="Move left">←</button>
+            <button type="button" data-direction="down" aria-label="Move down">↓</button>
+            <button type="button" data-direction="right" aria-label="Move right">→</button>
+          </div>
+        </div>
+        <p class="encouragement">🌿 Take your time. Every great explorer learns by trying!</p>
+      </aside>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-content">
       <div>
-        <a href="../index.html" class="logo footer-logo">
-          <span class="logo-icon" aria-hidden="true">&lt;/&gt;</span>
-          CodeJunior<span>Africa</span>
-        </a>
+        <a href="../index.html" class="logo footer-logo"><span class="logo-icon" aria-hidden="true">&lt;/&gt;</span>CodeJunior<span>Africa</span></a>
         <p>Empowering Africa's Next Generation of Coders.</p>
       </div>
-
       <div class="footer-links">
-        <a href="../index.html">Home</a>
-        <a href="../index.html#courses">Courses</a>
-        <a href="../lessons/index.html">Python Lessons</a>
-        <a href="../playground/index.html">Python Playground</a>
+        <a href="../index.html">Home</a><a href="../index.html#courses">Courses</a>
+        <a href="../lessons/index.html">Python Lessons</a><a href="../playground/index.html">Python Playground</a>
       </div>
     </div>
-
-    <div class="container footer-bottom">
-      <p>© CodeJuniorAfrica. All rights reserved.</p>
-      <p>Learn • Create • Innovate</p>
-    </div>
+    <div class="container footer-bottom"><p>© CodeJuniorAfrica. All rights reserved.</p><p>Learn • Create • Innovate</p></div>
   </footer>
-
 </body>
 </html>

@@ -9,7 +9,7 @@
     "dev:backend": "bash run.sh",
     "dev:frontend": "python3 -m http.server 8001 --bind 127.0.0.1",
     "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.worker.json",
-    "test:e2e": "playwright test tests/learning-centre.spec.js tests/dashboard.spec.js tests/parent-dashboard.spec.js tests/learning-path.spec.js tests/profile-challenge.spec.js",
+    "test:e2e": "playwright test tests/learning-centre.spec.js tests/dashboard.spec.js tests/parent-dashboard.spec.js tests/learning-path.spec.js tests/profile-challenge.spec.js tests/game-builder.spec.js",
     "test:pyodide": "playwright test tests/python-playground.integration.spec.js"
   },
   "devDependencies": {
