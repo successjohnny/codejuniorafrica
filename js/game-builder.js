@@ -41,6 +41,7 @@
   const HEIGHT = canvas.height;
   const PLAYER_SIZE = 28;
   const PLAYER_SPEED = 210;
+  const STAR_COLLECTION_RADIUS = 42;
   const PLAYER_START = Object.freeze({ x: 65, y: 65 });
 
   /** @type {Position[]} */
@@ -227,13 +228,36 @@
     drawTreasure();
     drawPlayer();
 
-    // Expose useful state for reliable automated browser tests.
     canvas.dataset.playerX = String(player.x);
     canvas.dataset.playerY = String(player.y);
   }
 
   function distance(a, b) {
     return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+
+  // Measures the shortest distance from a point to the player's movement path.
+  function distanceToSegment(point, start, end) {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const lengthSquared = dx * dx + dy * dy;
+
+    if (lengthSquared === 0) {
+      return distance(point, start);
+    }
+
+    const projection =
+      ((point.x - start.x) * dx + (point.y - start.y) * dy) /
+      lengthSquared;
+
+    const positionOnSegment = Math.max(0, Math.min(1, projection));
+
+    const closestPoint = {
+      x: start.x + positionOnSegment * dx,
+      y: start.y + positionOnSegment * dy
+    };
+
+    return distance(point, closestPoint);
   }
 
   function isBlocked(position) {
@@ -279,14 +303,19 @@
     }
 
     blockedNoticeShown = false;
+
+    const previousPosition = player;
     player = next;
 
-    const remaining = stars.filter(
-      (star) => distance(player, star) >= 30
+    // Check the entire movement path, not just the final player position.
+    const remainingStars = stars.filter(
+      (star) =>
+        distanceToSegment(star, previousPosition, player) >=
+        STAR_COLLECTION_RADIUS
     );
 
-    const collected = stars.length - remaining.length;
-    stars = remaining;
+    const collected = stars.length - remainingStars.length;
+    stars = remainingStars;
 
     if (collected > 0) {
       updateScore();
@@ -337,7 +366,6 @@
       return null;
     }
 
-    // Normalization prevents diagonal movement from being faster.
     const magnitude = Math.hypot(dx, dy);
 
     return {
@@ -356,7 +384,6 @@
       previousFrameTime = timestamp;
     }
 
-    // Limit the time step to prevent large jumps after a paused tab.
     const elapsed = Math.min(
       (timestamp - previousFrameTime) / 1000,
       0.05

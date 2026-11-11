@@ -101,6 +101,41 @@ test.describe("Jungle Treasure Adventure", () => {
     expect(afterWaiting.x).toBeCloseTo(afterRelease.x, 0);
   });
 
+  test("collects a star when the explorer moves over it", async ({ page }) => {
+    await page.getByRole("button", { name: /Start Adventure/ }).click();
+
+    // First move right, approaching the first star.
+    await page.keyboard.down("ArrowRight");
+
+    await expect
+      .poll(async () => (await getPlayerPosition(page)).x)
+      .toBeGreaterThan(230);
+
+    await page.keyboard.up("ArrowRight");
+
+    // Move left until the explorer is horizontally aligned with the star.
+    await page.keyboard.down("ArrowLeft");
+
+    await expect
+      .poll(async () => (await getPlayerPosition(page)).x)
+      .toBeLessThan(280);
+
+    await page.keyboard.up("ArrowLeft");
+
+    // Move down towards the first star at (270, 110).
+    await page.keyboard.down("ArrowDown");
+
+    await expect(page.locator("#score")).toHaveText("1", {
+      timeout: 5000
+    });
+
+    await page.keyboard.up("ArrowDown");
+
+    await expect(page.locator("#game-status")).toContainText(
+      "found a star"
+    );
+  });
+
   test("supports continuous movement with mobile direction controls", async ({
     page
   }) => {
