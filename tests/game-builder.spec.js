@@ -15,6 +15,55 @@ test.describe("Jungle Treasure Adventure", () => {
     }));
   }
 
+  async function moveUntilPosition(page, key, axis, threshold) {
+    await page.keyboard.down(key);
+
+    await page.waitForFunction(
+      ({ key, axis, threshold }) => {
+        const canvas = document.querySelector("#game-canvas");
+        const coordinate = axis === "x" ? "playerX" : "playerY";
+        const position = Number(canvas.dataset[coordinate]);
+
+        if (position >= threshold) {
+          window.dispatchEvent(
+            new KeyboardEvent("keyup", {
+              key,
+              bubbles: true
+            })
+          );
+
+          return true;
+        }
+
+        return false;
+      },
+      { key, axis, threshold },
+      { timeout: 5000 }
+    );
+
+    await page.keyboard.up(key);
+  }
+
+  async function seedProgress(page, levels) {
+    await page.evaluate(
+      ({ storageKey, savedLevels }) => {
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({
+            version: 1,
+            levels: savedLevels
+          })
+        );
+      },
+      {
+        storageKey: "codejuniorafrica.adventure.progress",
+        savedLevels: levels
+      }
+    );
+
+    await page.reload();
+  }
+
   test("shows the adventure title, mission and initial score", async ({
     page
   }) => {
@@ -104,32 +153,12 @@ test.describe("Jungle Treasure Adventure", () => {
   test("collects a star when the explorer moves over it", async ({ page }) => {
     await page.getByRole("button", { name: /Start Adventure/ }).click();
 
-    // First move right, approaching the first star.
-    await page.keyboard.down("ArrowRight");
+    // Approach the first star at (270, 110) without overshooting.
+    await moveUntilPosition(page, "ArrowRight", "x", 240);
+    await moveUntilPosition(page, "ArrowDown", "y", 90);
 
-    await expect
-      .poll(async () => (await getPlayerPosition(page)).x)
-      .toBeGreaterThan(230);
-
-    await page.keyboard.up("ArrowRight");
-
-    // Move left until the explorer is horizontally aligned with the star.
-    await page.keyboard.down("ArrowLeft");
-
-    await expect
-      .poll(async () => (await getPlayerPosition(page)).x)
-      .toBeLessThan(280);
-
-    await page.keyboard.up("ArrowLeft");
-
-    // Move down towards the first star at (270, 110).
-    await page.keyboard.down("ArrowDown");
-
-    await expect(page.locator("#score")).toHaveText("1", {
-      timeout: 5000
-    });
-
-    await page.keyboard.up("ArrowDown");
+    // Confirm that normal movement and collision logic collect the star.
+    await expect(page.locator("#score")).toHaveText("1");
 
     await expect(page.locator("#game-status")).toContainText(
       "found a star"
@@ -179,6 +208,94 @@ test.describe("Jungle Treasure Adventure", () => {
     const afterWaiting = await getPlayerPosition(page);
 
     expect(afterWaiting.x).toBeCloseTo(afterRelease.x, 0);
+  });
+
+  test("locks later levels until the previous level is completed", async ({
+    page
+  }) => {
+    await expect(page.locator('[data-level-select="0"]')).toBeEnabled();
+    await expect(page.locator('[data-level-select="1"]')).toBeDisabled();
+    await expect(page.locator('[data-level-select="2"]')).toBeDisabled();
+
+    await expect(page.locator("#completed-levels")).toHaveText("0");
+    await expect(page.locator("#progress-bar")).toHaveAttribute(
+      "aria-valuenow",
+      "0"
+    );
+  });
+
+  test("restores valid progress and unlocks only the next level", async ({
+    page
+  }) => {
+    await seedProgress(page, [
+      { completed: true, bestStars: 3 },
+      { completed: false, bestStars: 0 },
+      { completed: false, bestStars: 0 }
+    ]);
+
+    await expect(page.locator("#completed-levels")).toHaveText("1");
+    await expect(page.locator("#progress-bar")).toHaveAttribute(
+      "aria-valuenow",
+      "1"
+    );
+
+    await expect(page.locator('[data-level-select="0"]')).toBeEnabled();
+    await expect(page.locator('[data-level-select="1"]')).toBeEnabled();
+    await expect(page.locator('[data-level-select="2"]')).toBeDisabled();
+
+    await expect(
+      page.locator('[data-achievement="first-level"]')
+    ).not.toHaveClass(/is-locked/);
+
+    await expect(
+      page.locator('[data-achievement="three-levels"]')
+    ).toHaveClass(/is-locked/);
+  });
+
+  test("rejects progress that claims three stars without completing the level", async ({
+    page
+  }) => {
+    await seedProgress(page, [
+      { completed: false, bestStars: 3 },
+      { completed: false, bestStars: 0 },
+      { completed: false, bestStars: 0 }
+    ]);
+
+    await expect(page.locator("#completed-levels")).toHaveText("0");
+    await expect(page.locator('[data-level-select="1"]')).toBeDisabled();
+    await expect(page.locator('[data-level-select="2"]')).toBeDisabled();
+  });
+
+  test("rejects progress that completes a later level out of order", async ({
+    page
+  }) => {
+    await seedProgress(page, [
+      { completed: false, bestStars: 0 },
+      { completed: true, bestStars: 3 },
+      { completed: false, bestStars: 0 }
+    ]);
+
+    await expect(page.locator("#completed-levels")).toHaveText("0");
+    await expect(page.locator('[data-level-select="1"]')).toBeDisabled();
+    await expect(page.locator('[data-level-select="2"]')).toBeDisabled();
+  });
+
+  test("starts with fresh progress when saved JSON is invalid", async ({
+    page
+  }) => {
+    await page.evaluate(() => {
+      localStorage.setItem(
+        "codejuniorafrica.adventure.progress",
+        "{invalid-json"
+      );
+    });
+
+    await page.reload();
+
+    await expect(page.locator("#completed-levels")).toHaveText("0");
+    await expect(page.locator('[data-level-select="0"]')).toBeEnabled();
+    await expect(page.locator('[data-level-select="1"]')).toBeDisabled();
+    await expect(page.locator('[data-level-select="2"]')).toBeDisabled();
   });
 
   test("restart returns the game to its initial state", async ({ page }) => {
