@@ -15,6 +15,35 @@ test.describe("Jungle Treasure Adventure", () => {
     }));
   }
 
+  async function moveUntilPosition(page, key, axis, threshold) {
+    await page.keyboard.down(key);
+
+    await page.waitForFunction(
+      ({ key, axis, threshold }) => {
+        const canvas = document.querySelector("#game-canvas");
+        const coordinate = axis === "x" ? "playerX" : "playerY";
+        const position = Number(canvas.dataset[coordinate]);
+
+        if (position >= threshold) {
+          window.dispatchEvent(
+            new KeyboardEvent("keyup", {
+              key,
+              bubbles: true
+            })
+          );
+
+          return true;
+        }
+
+        return false;
+      },
+      { key, axis, threshold },
+      { timeout: 5000 }
+    );
+
+    await page.keyboard.up(key);
+  }
+
   async function seedProgress(page, levels) {
     await page.evaluate(
       ({ storageKey, savedLevels }) => {
@@ -124,38 +153,12 @@ test.describe("Jungle Treasure Adventure", () => {
   test("collects a star when the explorer moves over it", async ({ page }) => {
     await page.getByRole("button", { name: /Start Adventure/ }).click();
 
-    // Move past the first star horizontally.
-    await page.keyboard.down("ArrowRight");
+    // Approach the first star at (270, 110) without overshooting.
+    await moveUntilPosition(page, "ArrowRight", "x", 240);
+    await moveUntilPosition(page, "ArrowDown", "y", 90);
 
-    await expect
-      .poll(async () => (await getPlayerPosition(page)).x)
-      .toBeGreaterThan(300);
-
-    await page.keyboard.up("ArrowRight");
-
-    // Move left until the explorer is horizontally aligned with the star.
-    await page.keyboard.down("ArrowLeft");
-
-    await expect
-      .poll(async () => (await getPlayerPosition(page)).x)
-      .toBeLessThan(280);
-
-    await page.keyboard.up("ArrowLeft");
-
-    // Move down until the explorer is safely within the star's radius.
-    await page.keyboard.down("ArrowDown");
-
-    await expect
-      .poll(async () => (await getPlayerPosition(page)).y)
-      .toBeGreaterThan(100);
-
-    await expect(page.locator("#score")).toHaveText("1", {
-      timeout: 5000
-    });
-
-    await page.keyboard.up("ArrowDown");
-
-    await page.keyboard.up("ArrowDown");
+    // Confirm that normal movement and collision logic collect the star.
+    await expect(page.locator("#score")).toHaveText("1");
 
     await expect(page.locator("#game-status")).toContainText(
       "found a star"
